@@ -14,21 +14,31 @@
  */
 
 import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.Scanner;
+import java.io.IOException;
 
-public class Main {
+public class Repl {
 
-    private final static InputStreamReader input = new InputStreamReader(System.in);
-    private final static BufferedReader stdin = new BufferedReader(input);
-    private final static String version = "0.0.1";
+    private final BufferedReader stdin;
 
-    private static void printCopyright() {
-        System.out.println("Misti " + version + "\nCopyright (c) 2021 Fernando Enrique Araoz Morales.");
+    public Repl(BufferedReader stdin) {
+        this.stdin = stdin;
     }
 
-    public static void main(String[] args) {
-        printCopyright();
-        new Repl(stdin).run();
+    public void run() {
+        System.out.println("REPL: Enter expressions to evaluate them. Type Ctrl-D to exit.");
+        try {
+            while (true) {
+                System.out.print("> ");
+                String input = stdin.readLine();
+                if (input == null) {
+                    break;
+                }
+                System.out.println(input);
+            }
+            System.out.println();
+        } catch (IOException e) {
+            System.out.println();
+        }
     }
+
 }

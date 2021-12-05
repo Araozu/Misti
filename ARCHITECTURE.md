@@ -1,6 +1,6 @@
 The code follows the structure of a typical compiler:
 
-## `main.java.lexic`
+## `main.java.scanning`
 
 Contains all the code related to the lexical analysis phase.
 
