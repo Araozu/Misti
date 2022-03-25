@@ -24,6 +24,10 @@ public class Scanner {
     private int lineNumber = 0;
     // Tracks the position of the lexer
     private int position = 0;
+    // Tracks whether the scanner is at the start of the line
+    private boolean isLineStart = true;
+    // Tracks the indentation level of the line
+    private int indentationLevel = 0;
 
     public Scanner(String input) {
         this.input = input;
@@ -33,9 +37,15 @@ public class Scanner {
         ArrayList<Token> tokens = new ArrayList<>();
         int inputSize = input.length();
 
+        if (position >= input.length()) {
+            tokens.add(new Token(TokenType.EOF, "", lineNumber, position));
+            return tokens;
+        }
+
         // While there's still input
         while (position < inputSize) {
-            tokens.add(nextToken());
+            Token token = nextToken();
+            tokens.add(token);
         }
 
         return tokens;
@@ -47,11 +57,37 @@ public class Scanner {
      * @return The next token
      */
     protected Token nextToken() {
-
         Token nextToken;
 
+        // TODO: check current char and decide which scanner to use
+        if (position >= input.length()) {
+            return new Token(TokenType.EOF, "", lineNumber, position);
+        }
+        char nextChar = peek();
+
+        // If whitespace is found at the start of the line, update the indentation level
+        if (nextChar == ' ' && isLineStart) {
+            indentationLevel++;
+            position++;
+            return nextToken();
+        } else if (nextChar == '\n') {
+            position++;
+            isLineStart = true;
+            lineNumber++;
+            return nextToken();
+        }
 
         return null;
+    }
+
+    /**
+     * Returns the char at the current position without consuming it.
+     * Assumes EOF hasn't been reached.
+     *
+     * @return char at current position
+     */
+    protected char peek() {
+        return input.charAt(position);
     }
 
 }

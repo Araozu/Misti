@@ -18,13 +18,13 @@ package scanning;
 public class Token {
 
     // Indicates the type of token
-    final TokenType type;
+    public final TokenType type;
     // Contains the token as a raw string
-    final String value;
+    public final String value;
     // The line number where this token appears
-    final int lineNumber;
+    public final int lineNumber;
     // The absolute position of the start of this token
-    final int position;
+    public final int position;
 
     /**
      * @param type       Indicates the type of token

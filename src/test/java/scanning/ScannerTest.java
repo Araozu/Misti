@@ -31,26 +31,30 @@ public class ScannerTest {
     }
 
     @Test
-    @DisplayName("tokens should return an empty array list if the input has no tokens")
-    public void testTokensEmptyInput(){
+    @DisplayName("tokens should return an EOF token if the input has no tokens")
+    public void testTokensEmptyInput() {
         Scanner scanner;
         ArrayList<Token> tokens;
 
         scanner = new Scanner("");
         tokens = scanner.tokens();
-        Assertions.assertEquals(0, tokens.size());
+        Assertions.assertEquals(1, tokens.size());
+        Assertions.assertEquals(TokenType.EOF, tokens.get(0).type);
 
         scanner = new Scanner(" ");
         tokens = scanner.tokens();
-        Assertions.assertEquals(0, tokens.size());
+        Assertions.assertEquals(1, tokens.size());
+        Assertions.assertEquals(TokenType.EOF, tokens.get(0).type);
 
         scanner = new Scanner("  ");
         tokens = scanner.tokens();
-        Assertions.assertEquals(0, tokens.size());
+        Assertions.assertEquals(1, tokens.size());
+        Assertions.assertEquals(TokenType.EOF, tokens.get(0).type);
 
         scanner = new Scanner("\n");
         tokens = scanner.tokens();
-        Assertions.assertEquals(0, tokens.size());
+        Assertions.assertEquals(1, tokens.size());
+        Assertions.assertEquals(TokenType.EOF, tokens.get(0).type);
     }
 
     @Test

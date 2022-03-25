@@ -34,8 +34,8 @@ import scanning.TokenType;
  * <p>
  * e.g: 0 x 10  = (0) (x) (10); 0x10 = (0x10)
  */
-public class NumberAbstractScanner extends AbstractScanner {
-    public NumberAbstractScanner(String input, int position, int lineNumber) {
+public class NumberScanner extends AbstractScanner {
+    public NumberScanner(String input, int position, int lineNumber) {
         super(input, position, lineNumber);
     }
 
