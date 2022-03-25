@@ -15,6 +15,7 @@
 
 package scanning.scanner;
 
+import scanning.Scanner;
 import scanning.Token;
 import scanning.TokenType;
 
@@ -25,21 +26,22 @@ public abstract class AbstractScanner {
     protected final int lineNumber;
     private final int inputSize;
 
-    protected AbstractScanner(String input, int position, int lineNumber) {
+    protected AbstractScanner(Scanner scanner) {
+        input = scanner.getInput();
+        position = scanner.getPosition();
+        lineNumber = scanner.getLineNumber();
+
         if (input == null) {
-            throw new RuntimeException("NumberScanner: Input is null");
+            throw new RuntimeException("AbstractScanner: Input is null");
         }
         if (position < 0) {
-            throw new RuntimeException("NumberScanner: Start position is negative");
+            throw new RuntimeException("AbstractScanner: Start position is negative");
         }
         if (lineNumber < 0) {
-            throw new RuntimeException("NumberScanner: Line number is negative");
+            throw new RuntimeException("AbstractScanner: Line number is negative");
         }
 
-        this.input = input;
-        this.position = position;
         startPosition = position;
-        this.lineNumber = lineNumber;
         inputSize = input.length();
     }
 

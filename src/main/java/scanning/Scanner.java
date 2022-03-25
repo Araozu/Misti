@@ -31,6 +31,26 @@ public class Scanner {
 
     public Scanner(String input) {
         this.input = input;
+
+        if (input == null) {
+            throw new RuntimeException("NumberScanner: Input is null");
+        }
+    }
+
+    public String getInput() {
+        return input;
+    }
+
+    public int getLineNumber() {
+        return lineNumber;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public int getIndentationLevel() {
+        return indentationLevel;
     }
 
     public ArrayList<Token> tokens() {

@@ -15,6 +15,7 @@
 
 package scanning.scanner;
 
+import scanning.Scanner;
 import scanning.Token;
 import scanning.TokenType;
 
@@ -35,8 +36,8 @@ import scanning.TokenType;
  * e.g: 0 x 10  = (0) (x) (10); 0x10 = (0x10)
  */
 public class NumberScanner extends AbstractScanner {
-    public NumberScanner(String input, int position, int lineNumber) {
-        super(input, position, lineNumber);
+    public NumberScanner(Scanner scanner) {
+        super(scanner);
     }
 
     private Token scanDecimalInteger(String start) {
