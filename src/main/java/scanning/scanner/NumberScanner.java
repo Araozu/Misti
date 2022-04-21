@@ -31,31 +31,29 @@ public class NumberScanner extends AbstractScanner {
         super(scanner);
     }
 
-    private Token scanDecimalInteger(String start) {
-        StringBuilder builder = new StringBuilder();
-        builder.append(start);
+    private Token scanDecimalInteger() {
         char c;
         while (hasNext()) {
             c = next();
-            if ('0' <= c && c < '9') builder.append(c);
+            if ('0' <= c && c < '9') currentValue.append(c);
             else break;
         }
-        return create(TokenType.Integer, builder.toString());
+        return create(TokenType.Integer, currentValue.toString());
     }
 
-    private Token scanHexadecimalInteger(String start) {
+    // Assumes the next call to next() will return the first character
+    private Token scanHexadecimalInteger() {
         if (!hasNext()) return null;
 
-        StringBuilder builder = new StringBuilder();
-        builder.append(start);
+        currentValue.append(next());
 
         char c = next();
         if ('0' <= c && c < '9' || 'a' <= c && c <= 'f' || 'A' <= c && c <= 'F') {
-            builder.append(c);
+            currentValue.append(c);
             while (hasNext()) {
                 c = next();
                 if ('0' <= c && c < '9' || 'a' <= c && c <= 'f' || 'A' <= c && c <= 'F') {
-                    builder.append(c);
+                    currentValue.append(c);
                 }
             }
         } else {
@@ -63,11 +61,12 @@ public class NumberScanner extends AbstractScanner {
             return create(TokenType.Integer, "0");
         }
 
-        return create(TokenType.Integer, builder.toString());
+        return create(TokenType.Integer, currentValue.toString());
     }
 
     /**
      * Attempts to scan a number (double or integer). It returns the corresponding token.
+     * Assumes the next char is valid.
      * @return A number token, or null if not found
      */
     public Token scan() {
@@ -75,19 +74,21 @@ public class NumberScanner extends AbstractScanner {
 
         // DecimalInteger
         char c = next();
+        currentValue.append(c);
+
         if (c == '0') {
-            c = next();
+            c = peek();
             // HEX
             if (c == 'x' || c == 'X') {
-                return scanHexadecimalInteger("0" + c);
+                return scanHexadecimalInteger();
             } else if ('0' <= c && c < '9') {
-                return scanDecimalInteger("0" + c);
+                return scanDecimalInteger();
             } else {
                 // It's not decimal nor hex, return only 0
-                return create(TokenType.Integer, "0");
+                return create(TokenType.Integer, currentValue.toString());
             }
         } else if ('1' <= c && c < '9') {
-            return scanDecimalInteger(c + "");
+            return scanDecimalInteger();
         }
 
         return null;

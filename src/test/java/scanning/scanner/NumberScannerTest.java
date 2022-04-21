@@ -125,4 +125,10 @@ public class NumberScannerTest {
         assertEquals("1", result.value);
     }
 
+    @Test
+    @DisplayName("should scan a double using a dot")
+    public void t2() {
+        Token result = getTokenOf("0.1");
+        assertEquals("0.1", result.value);
+    }
 }

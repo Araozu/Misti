@@ -25,6 +25,10 @@ public abstract class AbstractScanner {
     protected final int startPosition;
     protected final int lineNumber;
     private final int inputSize;
+    /**
+     * Stores the value of the token currently being scanned
+     */
+    protected StringBuilder currentValue = new StringBuilder();
 
     protected AbstractScanner(Scanner scanner) {
         input = scanner.getInput();
