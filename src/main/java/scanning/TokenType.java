@@ -21,11 +21,10 @@ public enum TokenType {
     Identifier,
     Comment,
     Integer,
-    Double,
+    Floating,
     String,
     Operator,
     GroupingOpen,
     GroupingClose,
-
     EOF,
 }

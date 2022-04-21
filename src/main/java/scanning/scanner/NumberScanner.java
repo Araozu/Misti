@@ -31,29 +31,77 @@ public class NumberScanner extends AbstractScanner {
         super(scanner);
     }
 
-    private Token scanDecimalInteger() {
+    private boolean isDigit(char c) {
+        return '0' <= c && c < '9';
+    }
+
+    private boolean isHexDigit(char c) {
+        return 'a' <= c && c <= 'f' || 'A' <= c && c <= 'F';
+    }
+
+    private Token scanFloatingPoint() {
+        // Precondition: currentValue contains an integer, next() will return '.'
+
+        // If there's no more input return the scanned integer
+        if (!hasNext2()) return create(TokenType.Integer);
+
+        // Contains the char after '.'
+        char current = peek2();
+
+        if (!isDigit(current)) {
+            // Something like  '2.x' , return only 2 without consuming the dot and x
+            return create(TokenType.Integer);
+        }
+
+        // Consume and append the 2 characters: '.' and the next number
+        append(next());
+        append(next());
+
         char c;
         while (hasNext()) {
-            c = next();
-            if ('0' <= c && c < '9') currentValue.append(c);
+            c = peek1();
+            if (isDigit(c)) {
+                append(next());
+            }
+            // TODO: catch 'e' for exponents
+            else {
+                break;
+            }
+        }
+
+        return create(TokenType.Floating);
+    }
+
+    private Token scanDecimal() {
+        char c;
+        while (hasNext()) {
+            c = peek1();
+            if (isDigit(c)) {
+                append(next());
+            }
+            // TODO: Catch '.' or 'e' for floating point
+            else if (c == '.') {
+                return scanFloatingPoint();
+            }
             else break;
         }
-        return create(TokenType.Integer, currentValue.toString());
+        return create(TokenType.Integer);
     }
 
     // Assumes the next call to next() will return the first character
     private Token scanHexadecimalInteger() {
-        if (!hasNext()) return null;
+        // Precondition: currentValue is '0'
 
-        currentValue.append(next());
+        // Append 'x'
+        append(next());
 
         char c = next();
-        if ('0' <= c && c < '9' || 'a' <= c && c <= 'f' || 'A' <= c && c <= 'F') {
-            currentValue.append(c);
+        if (isDigit(c) || isHexDigit(c)) {
+            append(c);
             while (hasNext()) {
                 c = next();
-                if ('0' <= c && c < '9' || 'a' <= c && c <= 'f' || 'A' <= c && c <= 'F') {
-                    currentValue.append(c);
+                if (isDigit(c) || isHexDigit(c)) {
+                    append(c);
                 }
             }
         } else {
@@ -61,7 +109,7 @@ public class NumberScanner extends AbstractScanner {
             return create(TokenType.Integer, "0");
         }
 
-        return create(TokenType.Integer, currentValue.toString());
+        return create(TokenType.Integer);
     }
 
     /**
@@ -74,21 +122,23 @@ public class NumberScanner extends AbstractScanner {
 
         // DecimalInteger
         char c = next();
-        currentValue.append(c);
+        append(c);
 
         if (c == '0') {
-            c = peek();
+            c = peek1();
             // HEX
             if (c == 'x' || c == 'X') {
                 return scanHexadecimalInteger();
-            } else if ('0' <= c && c < '9') {
-                return scanDecimalInteger();
+            } else if (c == '.') {
+                return scanFloatingPoint();
+            } else if (isDigit(c)) {
+                return scanDecimal();
             } else {
                 // It's not decimal nor hex, return only 0
-                return create(TokenType.Integer, currentValue.toString());
+                return create(TokenType.Integer);
             }
-        } else if ('1' <= c && c < '9') {
-            return scanDecimalInteger();
+        } else if (isDigit(c)) {
+            return scanDecimal();
         }
 
         return null;

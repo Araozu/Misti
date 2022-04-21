@@ -125,6 +125,8 @@ public class NumberScannerTest {
         assertEquals("1", result.value);
     }
 
+    // TODO: After '0x 1' the position should be 1
+
     @Test
     @DisplayName("should scan a double using a dot")
     public void t2() {

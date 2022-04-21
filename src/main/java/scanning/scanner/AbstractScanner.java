@@ -28,7 +28,7 @@ public abstract class AbstractScanner {
     /**
      * Stores the value of the token currently being scanned
      */
-    protected StringBuilder currentValue = new StringBuilder();
+    private StringBuilder currentValue = new StringBuilder();
 
     protected AbstractScanner(Scanner scanner) {
         input = scanner.getInput();
@@ -72,8 +72,17 @@ public abstract class AbstractScanner {
      *
      * @return the next character
      */
-    protected char peek() {
+    protected char peek1() {
         return input.charAt(position);
+    }
+
+    /**
+     * Returns the character after the next, without consuming it.
+     * Assumes that character exists
+     * @return
+     */
+    protected char peek2() {
+        return input.charAt(position + 1);
     }
 
     /**
@@ -83,6 +92,27 @@ public abstract class AbstractScanner {
         return position < inputSize;
     }
 
+    /**
+     * @return Whether there is at least 2 chars remaining
+     */
+    protected boolean hasNext2() {
+        return position + 1 < inputSize;
+    }
+
+    protected void append(char c) {
+        currentValue.append(c);
+    }
+
+    protected void append(String s) {
+        currentValue.append(s);
+    }
+
+    /**
+     * Creates a token with the specified value
+     * @param type
+     * @param value
+     * @return
+     */
     protected Token create(TokenType type, String value) {
         return new Token(
                 type,
@@ -90,5 +120,14 @@ public abstract class AbstractScanner {
                 lineNumber,
                 startPosition
         );
+    }
+
+    /**
+     * Creates a token with the value currently stored
+     * @param type The type of token
+     * @return A token
+     */
+    protected Token create(TokenType type) {
+        return create(type, currentValue.toString());
     }
 }
