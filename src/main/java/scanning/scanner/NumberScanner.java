@@ -20,20 +20,11 @@ import scanning.Token;
 import scanning.TokenType;
 
 /**
- * Scans a double or integer of the format:
- * <p>
- * Number = Double | Integer
- * <p>
- * Integer = DecimalInteger
- * <p>
- * DecimalInteger = [0-9]+
- * <p>
- * HexadecimalInteger = 0[xX][0-9a-fA-F]+
- * <p>
- * For HexadecimalInteger there shouldn't be whitespace around the [xX].
- * If there is, that will be scanned as three different tokens.
- * <p>
- * e.g: 0 x 10  = (0) (x) (10); 0x10 = (0x10)
+ * Scans a double or integer. The specification is found in
+ * the spec web page under /primitives/number.
+ *
+ * This class assumes that the first character conforms to the spec,
+ * so it doesn't handle whitespace or indentation.
  */
 public class NumberScanner extends AbstractScanner {
     public NumberScanner(Scanner scanner) {
@@ -59,11 +50,11 @@ public class NumberScanner extends AbstractScanner {
         builder.append(start);
 
         char c = next();
-        if ('0' <= c && c < '9' || 'a' <= c && c < 'f' || 'A' <= c && c < 'F') {
+        if ('0' <= c && c < '9' || 'a' <= c && c <= 'f' || 'A' <= c && c <= 'F') {
             builder.append(c);
             while (hasNext()) {
                 c = next();
-                if ('0' <= c && c < '9' || 'a' <= c && c < 'f' || 'A' <= c && c < 'F') {
+                if ('0' <= c && c < '9' || 'a' <= c && c <= 'f' || 'A' <= c && c <= 'F') {
                     builder.append(c);
                 }
             }
@@ -77,6 +68,7 @@ public class NumberScanner extends AbstractScanner {
 
     /**
      * Attempts to scan a number (double or integer). It returns the corresponding token.
+     * @return A number token, or null if not found
      */
     public Token scan() {
         if (!hasNext()) return null;

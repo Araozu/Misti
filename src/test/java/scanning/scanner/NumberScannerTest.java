@@ -22,7 +22,13 @@ import scanning.Scanner;
 import scanning.Token;
 import scanning.TokenType;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class NumberScannerTest {
+
+    private static Token getTokenOf(String s) {
+        return new NumberScanner(new Scanner(s)).scan();
+    }
 
     @Test
     @DisplayName("should throw if input is null")
@@ -31,7 +37,7 @@ public class NumberScannerTest {
             new NumberScanner(new Scanner(null));
             Assertions.fail("scan did not throw with null input");
         } catch (RuntimeException e) {
-            Assertions.assertEquals("NumberScanner: Input is null", e.getMessage());
+            assertEquals("NumberScanner: Input is null", e.getMessage());
         }
     }
 
@@ -54,24 +60,24 @@ public class NumberScannerTest {
     public void shouldScanSimpleInteger() {
         Token result = new NumberScanner(new Scanner("123")).scan();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(TokenType.Integer, result.type);
-        Assertions.assertEquals("123", result.value);
-        Assertions.assertEquals(0, result.lineNumber);
-        Assertions.assertEquals(0, result.position);
+        assertEquals(TokenType.Integer, result.type);
+        assertEquals("123", result.value);
+        assertEquals(0, result.lineNumber);
+        assertEquals(0, result.position);
 
-        result = new NumberScanner(new Scanner("  0123")).scan();
+        result = new NumberScanner(new Scanner("0123")).scan();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(TokenType.Integer, result.type);
-        Assertions.assertEquals("0123", result.value);
-        Assertions.assertEquals(1, result.lineNumber);
-        Assertions.assertEquals(2, result.position);
+        assertEquals(TokenType.Integer, result.type);
+        assertEquals("0123", result.value);
+        assertEquals(0, result.lineNumber);
+        assertEquals(0, result.position);
 
-        result = new NumberScanner(new Scanner("  0123 45")).scan();
+        result = new NumberScanner(new Scanner("0123 45")).scan();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(TokenType.Integer, result.type);
-        Assertions.assertEquals("0123", result.value);
-        Assertions.assertEquals(1, result.lineNumber);
-        Assertions.assertEquals(2, result.position);
+        assertEquals(TokenType.Integer, result.type);
+        assertEquals("0123", result.value);
+        assertEquals(0, result.lineNumber);
+        assertEquals(0, result.position);
     }
 
     @Test
@@ -79,17 +85,12 @@ public class NumberScannerTest {
     public void shouldScanAHexValue(){
         Token result = new NumberScanner(new Scanner("0x20")).scan();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(TokenType.Integer, result.type);
-        Assertions.assertEquals("0x20", result.value);
-        Assertions.assertEquals(0, result.lineNumber);
-        Assertions.assertEquals(0, result.position);
+        assertEquals(TokenType.Integer, result.type);
+        assertEquals("0x20", result.value);
+        assertEquals(0, result.lineNumber);
+        assertEquals(0, result.position);
 
-        result = new NumberScanner(new Scanner("hello 0X20")).scan();
-        Assertions.assertNotNull(result);
-        Assertions.assertEquals(TokenType.Integer, result.type);
-        Assertions.assertEquals("0X20", result.value);
-        Assertions.assertEquals(0, result.lineNumber);
-        Assertions.assertEquals(6, result.position);
+        assertEquals("0xff", getTokenOf("0xff").value);
     }
 
     @Test
@@ -97,24 +98,31 @@ public class NumberScannerTest {
     public void shouldNotScanAnIncompleteHexValue(){
         Token result = new NumberScanner(new Scanner("0 x20")).scan();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(TokenType.Integer, result.type);
-        Assertions.assertEquals("0", result.value);
-        Assertions.assertEquals(0, result.lineNumber);
-        Assertions.assertEquals(0, result.position);
+        assertEquals(TokenType.Integer, result.type);
+        assertEquals("0", result.value);
+        assertEquals(0, result.lineNumber);
+        assertEquals(0, result.position);
 
         result = new NumberScanner(new Scanner("0x 20")).scan();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(TokenType.Integer, result.type);
-        Assertions.assertEquals("0", result.value);
-        Assertions.assertEquals(0, result.lineNumber);
-        Assertions.assertEquals(0, result.position);
+        assertEquals(TokenType.Integer, result.type);
+        assertEquals("0", result.value);
+        assertEquals(0, result.lineNumber);
+        assertEquals(0, result.position);
 
         result = new NumberScanner(new Scanner("0 x 20")).scan();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(TokenType.Integer, result.type);
-        Assertions.assertEquals("0", result.value);
-        Assertions.assertEquals(0, result.lineNumber);
-        Assertions.assertEquals(0, result.position);
+        assertEquals(TokenType.Integer, result.type);
+        assertEquals("0", result.value);
+        assertEquals(0, result.lineNumber);
+        assertEquals(0, result.position);
+    }
+
+    @Test
+    @DisplayName("should not scan a hex number if it doesn't start with 0")
+    public void test() {
+        Token result = getTokenOf("1xff");
+        assertEquals("1", result.value);
     }
 
 }
