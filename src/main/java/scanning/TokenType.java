@@ -27,4 +27,8 @@ public enum TokenType {
     GroupingOpen,
     GroupingClose,
     EOF,
+    // Indicates an increase in indentation
+    Indent,
+    // Indicates a decrease in indentation
+    Dedent,
 }

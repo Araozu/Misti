@@ -86,6 +86,7 @@ public class Scanner {
         char nextChar = peek();
 
         // If whitespace is found at the start of the line, update the indentation level
+        // TODO: Emit INDENT and DEDENT tokens
         if (nextChar == ' ' && isLineStart) {
             indentationLevel++;
             position++;

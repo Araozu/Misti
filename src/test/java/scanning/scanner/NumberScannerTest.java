@@ -126,6 +126,11 @@ public class NumberScannerTest {
     }
 
     // TODO: After '0x 1' the position should be 1
+    @Test
+    @DisplayName("Should ")
+    void t1() {
+
+    }
 
     @Test
     @DisplayName("should scan a double using a dot")
