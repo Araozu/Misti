@@ -73,6 +73,7 @@ public abstract class AbstractScanner {
      * @return the next character
      */
     protected char peek1() {
+        if (!hasNext()) return '\0';
         return input.charAt(position);
     }
 
@@ -83,6 +84,10 @@ public abstract class AbstractScanner {
      */
     protected char peek2() {
         return input.charAt(position + 1);
+    }
+
+    protected char peek3() {
+        return input.charAt(position + 2);
     }
 
     /**

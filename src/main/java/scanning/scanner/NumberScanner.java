@@ -32,7 +32,7 @@ public class NumberScanner extends AbstractScanner {
     }
 
     private boolean isDigit(char c) {
-        return '0' <= c && c < '9';
+        return '0' <= c && c <= '9';
     }
 
     private boolean isHexDigit(char c) {
@@ -40,7 +40,8 @@ public class NumberScanner extends AbstractScanner {
     }
 
     private Token scanFloatingPoint() {
-        // Precondition: currentValue contains an integer, next() will return '.'
+        // Precondition: currentValue contains an integer
+        //               next() will return '.'
 
         // If there's no more input return the scanned integer
         if (!hasNext2()) return create(TokenType.Integer);
@@ -72,6 +73,36 @@ public class NumberScanner extends AbstractScanner {
         return create(TokenType.Floating);
     }
 
+    private Token scanScientificNotation() {
+        // Precondition: currentValue contains an integer or floating point
+        //               next() returns 'e'
+
+        // Should contain + or -
+        char p2 = peek2();
+        if (p2 != '+' && p2 != '-') {
+            // TODO: Report an error of scientific notation, instead of generic error?
+            // TODO: What to return? TokenType.Floating or Integer?
+
+            return create(TokenType.Floating);
+        }
+
+        // Should contain a digit
+        char p3 = peek3();
+        if (!isDigit(p3)) {
+            // TODO: What to return? TokenType.Floating or Integer?
+            return create(TokenType.Floating);
+        }
+
+        // Consume the 3 peeked chars: e, +/- and digit
+        append(next());
+        append(next());
+        append(next());
+
+        while (isDigit(peek1())) append(next());
+
+        return create(TokenType.Floating);
+    }
+
     private Token scanDecimal() {
         char c;
         while (hasNext()) {
@@ -83,6 +114,9 @@ public class NumberScanner extends AbstractScanner {
             else if (c == '.') {
                 return scanFloatingPoint();
             }
+            else if (c == 'e') {
+                return scanScientificNotation();
+            }
             else break;
         }
         return create(TokenType.Integer);
@@ -91,17 +125,21 @@ public class NumberScanner extends AbstractScanner {
     // Assumes the next call to next() will return the first character
     private Token scanHexadecimalInteger() {
         // Precondition: currentValue is '0'
+        //               peek() returns 'x'
 
-        // Append 'x'
-        append(next());
-
-        char c = next();
+        // Test the next character
+        char c = peek2();
         if (isDigit(c) || isHexDigit(c)) {
-            append(c);
+            // If the hex is valid, consume and append the 2 chars
+            // Consume and append 'x'
+            append(next());
+            // Consume and returns the next digit
+            append(next());
+
             while (hasNext()) {
-                c = next();
+                c = peek1();
                 if (isDigit(c) || isHexDigit(c)) {
-                    append(c);
+                    append(next());
                 }
             }
         } else {
@@ -133,6 +171,8 @@ public class NumberScanner extends AbstractScanner {
                 return scanFloatingPoint();
             } else if (isDigit(c)) {
                 return scanDecimal();
+            } else if (c == 'e') {
+                return scanScientificNotation();
             } else {
                 // It's not decimal nor hex, return only 0
                 return create(TokenType.Integer);

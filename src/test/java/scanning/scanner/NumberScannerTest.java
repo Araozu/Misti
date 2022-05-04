@@ -125,11 +125,23 @@ public class NumberScannerTest {
         assertEquals("1", result.value);
     }
 
-    // TODO: After '0x 1' the position should be 1
     @Test
-    @DisplayName("Should ")
+    @DisplayName("should not consume an unneeded character in an invalid hex")
     void t1() {
+        var scanner = new NumberScanner(new Scanner("0x 1"));
+        Token result = scanner.scan();
+        Assertions.assertNotNull(result);
+        assertEquals("0", result.value);
+        assertEquals(1, scanner.position);
+    }
 
+    @Test
+    @DisplayName("should not consume an unneeded char after scanning 0")
+    void t3() {
+        var sc = new NumberScanner(new Scanner("0 a"));
+        var result = sc.scan();
+        assertEquals("0", result.value);
+        assertEquals(1, sc.position);
     }
 
     @Test
@@ -137,5 +149,19 @@ public class NumberScannerTest {
     public void t2() {
         Token result = getTokenOf("0.1");
         assertEquals("0.1", result.value);
+    }
+
+    @Test
+    @DisplayName("should scan a fp with many digits")
+    void t4() {
+        assertEquals("10234.4897234", getTokenOf("10234.4897234").value);
+    }
+
+    @Test
+    @DisplayName("should scan a fp without decimal part, with exponent")
+    void t5() {
+        assertEquals("1e+0", getTokenOf("1e+0").value);
+        assertEquals("1e-0", getTokenOf("1e-0").value);
+        assertEquals("1e+10", getTokenOf("1e+10").value);
     }
 }
