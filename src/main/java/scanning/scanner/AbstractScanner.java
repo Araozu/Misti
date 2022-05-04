@@ -83,6 +83,7 @@ public abstract class AbstractScanner {
      * @return
      */
     protected char peek2() {
+        if (!hasNext2()) return '\0';
         return input.charAt(position + 1);
     }
 
@@ -102,6 +103,13 @@ public abstract class AbstractScanner {
      */
     protected boolean hasNext2() {
         return position + 1 < inputSize;
+    }
+
+    /**
+     * @return Whether there is at least 3 chars remaining
+     */
+    protected boolean hasNext3() {
+        return position + 2 < inputSize;
     }
 
     protected void append(char c) {

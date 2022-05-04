@@ -30,6 +30,10 @@ public class NumberScannerTest {
         return new NumberScanner(new Scanner(s)).scan();
     }
 
+    private static String valueOf(String s) {
+        return getTokenOf(s).value;
+    }
+
     @Test
     @DisplayName("should throw if input is null")
     public void shouldThrowIfInputIsNull() {
@@ -39,20 +43,6 @@ public class NumberScannerTest {
         } catch (RuntimeException e) {
             assertEquals("NumberScanner: Input is null", e.getMessage());
         }
-    }
-
-    @Test
-    @DisplayName("should return null if there is no number")
-    public void shouldReturnNullIfTheresNoNumber() {
-        Token result = new NumberScanner(new Scanner("")).scan();
-        Assertions.assertNull(result);
-    }
-
-    @Test
-    @DisplayName("should return null if does not start with a number")
-    public void shouldReturnNullIfDoesntStartWithNumber() {
-        Token result = new NumberScanner(new Scanner("abc")).scan();
-        Assertions.assertNull(result);
     }
 
     @Test
@@ -163,5 +153,11 @@ public class NumberScannerTest {
         assertEquals("1e+0", getTokenOf("1e+0").value);
         assertEquals("1e-0", getTokenOf("1e-0").value);
         assertEquals("1e+10", getTokenOf("1e+10").value);
+    }
+
+    @Test
+    @DisplayName("should scan a single digit")
+    void t6() {
+        assertEquals("1", valueOf("1"));
     }
 }
