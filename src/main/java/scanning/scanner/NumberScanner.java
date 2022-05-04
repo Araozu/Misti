@@ -57,7 +57,9 @@ public class NumberScanner extends AbstractScanner {
             if (isDigit(c)) {
                 append(next());
             }
-            // TODO: catch 'e' for scientific notation
+            else if (c == 'e') {
+                return scanScientificNotation();
+            }
             else {
                 break;
             }
@@ -79,8 +81,7 @@ public class NumberScanner extends AbstractScanner {
         }
 
         // Should contain a digit
-        char p3 = peek3();
-        if (!isDigit(p3)) {
+        if (!isDigit(peek3())) {
             // TODO: What to return? TokenType.Floating or Integer?
             return create(TokenType.Floating);
         }
@@ -155,12 +156,9 @@ public class NumberScanner extends AbstractScanner {
                 // It's not decimal nor hex, return only 0
                 return create(TokenType.Integer);
             }
-        } else if (isDigit(c)) {
-            return scanDecimal();
         }
 
-        // Unreachable
-        return create(TokenType.Integer);
+        return scanDecimal();
     }
 
 }

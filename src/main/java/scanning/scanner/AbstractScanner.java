@@ -88,6 +88,7 @@ public abstract class AbstractScanner {
     }
 
     protected char peek3() {
+        if (!hasNext3()) return '\0';
         return input.charAt(position + 2);
     }
 

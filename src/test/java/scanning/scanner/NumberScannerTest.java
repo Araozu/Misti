@@ -142,6 +142,12 @@ public class NumberScannerTest {
     }
 
     @Test
+    @DisplayName("should not scan an incomplete fp")
+    void t22() {
+        assertEquals("15", valueOf("15.toUpperCase"));
+    }
+
+    @Test
     @DisplayName("should scan a fp with many digits")
     void t4() {
         assertEquals("10234.4897234", getTokenOf("10234.4897234").value);
@@ -153,11 +159,31 @@ public class NumberScannerTest {
         assertEquals("1e+0", getTokenOf("1e+0").value);
         assertEquals("1e-0", getTokenOf("1e-0").value);
         assertEquals("1e+10", getTokenOf("1e+10").value);
+        assertEquals("0e+0", valueOf("0e+0"));
+        assertEquals("123498790e+12349870", valueOf("123498790e+12349870"));
+        assertEquals("1e-123498702397", valueOf("1e-123498702397"));
     }
 
     @Test
     @DisplayName("should scan a single digit")
     void t6() {
         assertEquals("1", valueOf("1"));
+    }
+
+    @Test
+    @DisplayName("should scan a fp with decimal part")
+    void t7() {
+        assertEquals("1.24e+1", valueOf("1.24e+1"));
+        assertEquals("1.24234609e+1123498", valueOf("1.24234609e+1123498"));
+        assertEquals("0.00000000000001e+1", valueOf("0.00000000000001e+1"));
+    }
+
+    @Test
+    @DisplayName("should not scan an incomplete fp with exponent")
+    void t8() {
+        assertEquals("100", valueOf("100e"));
+        assertEquals("100", valueOf("100e+"));
+        assertEquals("100", valueOf("100e-"));
+        assertEquals("100", valueOf("100ex"));
     }
 }
