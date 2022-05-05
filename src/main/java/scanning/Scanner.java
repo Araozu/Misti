@@ -15,6 +15,8 @@
 
 package scanning;
 
+import scanning.scanner.NumberScanner;
+
 import java.util.ArrayList;
 
 public class Scanner {
@@ -65,6 +67,8 @@ public class Scanner {
         // While there's still input
         while (position < inputSize) {
             Token token = nextToken();
+            // If an unknown character is found
+            if (token == null) continue;
             tokens.add(token);
         }
 
@@ -77,25 +81,37 @@ public class Scanner {
      * @return The next token
      */
     protected Token nextToken() {
-        Token nextToken;
-
-        // TODO: check current char and decide which scanner to use
         if (position >= input.length()) {
             return new Token(TokenType.EOF, "", lineNumber, position);
         }
         char nextChar = peek();
 
+        // TODO: check current char and decide which scanner to use
+        // Check for number - integer of float
+        if (Utils.isDigit(nextChar)) {
+            NumberScanner sc = new NumberScanner(this);
+            Token t = sc.scan();
+            this.position = sc.getPosition();
+            return t;
+        }
         // If whitespace is found at the start of the line, update the indentation level
         // TODO: Emit INDENT and DEDENT tokens
-        if (nextChar == ' ' && isLineStart) {
+        else if (nextChar == ' ' && isLineStart) {
             indentationLevel++;
             position++;
             return nextToken();
-        } else if (nextChar == '\n') {
+        }
+        else if (nextChar == '\n') {
             position++;
             isLineStart = true;
             lineNumber++;
             return nextToken();
+        }
+        // No adequate scanner found, or implemented.
+        else {
+            // TODO: Error handling
+            System.err.println("unrecognized character: " + nextChar);
+            position++;
         }
 
         return null;

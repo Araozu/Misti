@@ -13,8 +13,12 @@
  * if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+import scanning.Scanner;
+import scanning.Token;
+
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Repl {
 
@@ -33,7 +37,11 @@ public class Repl {
                 if (input == null) {
                     break;
                 }
-                System.out.println(input);
+                Scanner sc = new Scanner(input);
+                ArrayList<Token> tokens = sc.tokens();
+                for (Token t: tokens) {
+                    System.out.println("[" + t.value + "]");
+                }
             }
             System.out.println();
         } catch (IOException e) {

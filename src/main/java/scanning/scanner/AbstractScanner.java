@@ -49,6 +49,10 @@ public abstract class AbstractScanner {
         inputSize = input.length();
     }
 
+    public int getPosition() {
+        return position;
+    }
+
     /**
      * Attempts to scan a token.
      *

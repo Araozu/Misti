@@ -19,6 +19,9 @@ import scanning.Scanner;
 import scanning.Token;
 import scanning.TokenType;
 
+import static scanning.Utils.isDigit;
+import static scanning.Utils.isHexDigit;
+
 /**
  * Scans a double or integer. The specification is found in
  * the spec web page under /primitives/number.
@@ -29,14 +32,6 @@ import scanning.TokenType;
 public class NumberScanner extends AbstractScanner {
     public NumberScanner(Scanner scanner) {
         super(scanner);
-    }
-
-    private boolean isDigit(char c) {
-        return '0' <= c && c <= '9';
-    }
-
-    private boolean isHexDigit(char c) {
-        return isDigit(c) || 'a' <= c && c <= 'f' || 'A' <= c && c <= 'F';
     }
 
     private Token scanFloatingPoint() {
