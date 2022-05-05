@@ -53,7 +53,7 @@ public class NumberScanner extends AbstractScanner {
                 append(next());
             }
             else if (c == 'e') {
-                return scanScientificNotation();
+                return scanScientificNotation(TokenType.Floating);
             }
             else {
                 break;
@@ -63,7 +63,12 @@ public class NumberScanner extends AbstractScanner {
         return create(TokenType.Floating);
     }
 
-    private Token scanScientificNotation() {
+    /**
+     * Tries to scan scientific notation. If it fails, it returns the current value.
+     * @param context The type of the current value: Integer or Float
+     * @return A token
+     */
+    private Token scanScientificNotation(TokenType context) {
         // Precondition: currentValue contains an integer or floating point
         //               next() returns 'e'
 
@@ -71,14 +76,12 @@ public class NumberScanner extends AbstractScanner {
         char p2 = peek2();
         if (p2 != '+' && p2 != '-') {
             // TODO: Report an error of scientific notation, instead of generic error?
-            // TODO: What to return? TokenType.Floating or Integer?
-            return create(TokenType.Floating);
+            return create(context);
         }
 
         // Should contain a digit
         if (!isDigit(peek3())) {
-            // TODO: What to return? TokenType.Floating or Integer?
-            return create(TokenType.Floating);
+            return create(context);
         }
 
         // Consume the 2 peeked chars: 'e' and +/-
@@ -100,7 +103,7 @@ public class NumberScanner extends AbstractScanner {
                 return scanFloatingPoint();
             }
             else if (c == 'e') {
-                return scanScientificNotation();
+                return scanScientificNotation(TokenType.Integer);
             }
             else break;
         }
@@ -146,7 +149,7 @@ public class NumberScanner extends AbstractScanner {
             } else if (isDigit(c)) {
                 return scanDecimal();
             } else if (c == 'e') {
-                return scanScientificNotation();
+                return scanScientificNotation(TokenType.Integer);
             } else {
                 // It's not decimal nor hex, return only 0
                 return create(TokenType.Integer);
