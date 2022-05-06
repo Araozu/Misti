@@ -20,9 +20,18 @@ import scanning.Token;
 import scanning.TokenType;
 import scanning.Utils;
 
+import java.util.HashMap;
+
 public class IdentifierScanner extends AbstractScanner{
     public IdentifierScanner(Scanner sc) {
         super(sc);
+    }
+
+    public static final HashMap<String, TokenType> keywords = new HashMap<>();
+
+    static {
+        keywords.put("var", TokenType.VAR);
+        keywords.put("val", TokenType.VAL);
     }
 
     /**
@@ -44,6 +53,11 @@ public class IdentifierScanner extends AbstractScanner{
 
         while (isIdentifierChar(peek1())) append(next());
 
-        return create(TokenType.Identifier);
+        String currentValue = getCurrentValue();
+        // Try to get a keyword
+        TokenType type = keywords.get(currentValue);
+        if (type == null) type = TokenType.Identifier;
+
+        return create(type);
     }
 }

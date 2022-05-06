@@ -28,7 +28,7 @@ public abstract class AbstractScanner {
     /**
      * Stores the value of the token currently being scanned
      */
-    private StringBuilder currentValue = new StringBuilder();
+    private final StringBuilder currentValue = new StringBuilder();
 
     protected AbstractScanner(Scanner scanner) {
         input = scanner.getInput();
@@ -53,6 +53,10 @@ public abstract class AbstractScanner {
         return position;
     }
 
+    protected String getCurrentValue() {
+        return currentValue.toString();
+    }
+
     /**
      * Attempts to scan a token.
      *
@@ -72,9 +76,7 @@ public abstract class AbstractScanner {
     }
 
     /**
-     * Returns the next character, without consuming it.
-     *
-     * @return the next character
+     * @return The next character without consuming it, or \0 if EOF is reached
      */
     protected char peek1() {
         if (!hasNext()) return '\0';
@@ -82,15 +84,16 @@ public abstract class AbstractScanner {
     }
 
     /**
-     * Returns the character after the next, without consuming it.
-     * Assumes that character exists
-     * @return
+     * @return The next's next character without consuming it, or \0 if EOF is reached
      */
     protected char peek2() {
         if (!hasNext2()) return '\0';
         return input.charAt(position + 1);
     }
 
+    /**
+     * @return The next's next's next character without consuming it, or \0 if EOF is reached
+     */
     protected char peek3() {
         if (!hasNext3()) return '\0';
         return input.charAt(position + 2);
@@ -121,17 +124,12 @@ public abstract class AbstractScanner {
         currentValue.append(c);
     }
 
-    protected void append(String s) {
-        currentValue.append(s);
-    }
-
     /**
-     * Creates a token with the specified value
-     * @param type
-     * @param value
-     * @return
+     * @param type The type of token
+     * @param value The string value
+     * @return A token with these values
      */
-    protected Token create(TokenType type, String value) {
+    private Token create(TokenType type, String value) {
         return new Token(
                 type,
                 value,

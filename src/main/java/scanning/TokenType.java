@@ -31,4 +31,7 @@ public enum TokenType {
     Indent,
     // Indicates a decrease in indentation
     Dedent,
+    // Keywords
+    VAR,
+    VAL,
 }

@@ -18,10 +18,18 @@ package scanning.scanner;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import scanning.Scanner;
+import scanning.Token;
+import scanning.TokenType;
+
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class IdentifierScannerTest {
+
+    private Token tokenOf(String s) {
+        return new IdentifierScanner(new Scanner(s)).scan();
+    }
 
     private String valueOf(String s) {
         return new IdentifierScanner(new Scanner(s)).scan().value;
@@ -71,5 +79,21 @@ public class IdentifierScannerTest {
                 "aVeryLongIdentifier2WithSome5Numbers67InBetween1",
                 valueOf("aVeryLongIdentifier2WithSome5Numbers67InBetween1")
         );
+    }
+
+    @Test
+    @DisplayName("should scan a keyword")
+    void t4() {
+        var returnToken = tokenOf("var");
+        assertEquals(TokenType.VAR, returnToken.type);
+    }
+
+    @Test
+    @DisplayName("should scan all keywords")
+    void t5() {
+        for (Map.Entry<String, TokenType> entry : IdentifierScanner.keywords.entrySet()) {
+            var returnToken = tokenOf(entry.getKey());
+            assertEquals(entry.getValue(), returnToken.type);
+        }
     }
 }
