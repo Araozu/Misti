@@ -15,6 +15,8 @@
 
 package scanning;
 
+import scanning.scanner.AbstractScanner;
+import scanning.scanner.IdentifierScanner;
 import scanning.scanner.NumberScanner;
 
 import java.util.ArrayList;
@@ -87,9 +89,17 @@ public class Scanner {
         char nextChar = peek();
 
         // TODO: check current char and decide which scanner to use
+
         // Check for number - integer of float
         if (Utils.isDigit(nextChar)) {
-            NumberScanner sc = new NumberScanner(this);
+            AbstractScanner sc = new NumberScanner(this);
+            Token t = sc.scan();
+            this.position = sc.getPosition();
+            return t;
+        }
+        // Check for identifier/keyword
+        else if (Utils.isLowercase(nextChar) || nextChar == '_') {
+            AbstractScanner sc = new IdentifierScanner(this);
             Token t = sc.scan();
             this.position = sc.getPosition();
             return t;

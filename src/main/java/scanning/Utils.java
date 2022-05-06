@@ -20,6 +20,14 @@ public class Utils {
         return '0' <= c && c <= '9';
     }
 
+    public static boolean isLowercase(char c) {
+        return (c >= 'a' && c <= 'z');
+    }
+
+    public static boolean isUppercase(char c) {
+        return (c >= 'A' && c <= 'Z');
+    }
+
     public static boolean isHexDigit(char c) {
         return isDigit(c) || 'a' <= c && c <= 'f' || 'A' <= c && c <= 'F';
     }
