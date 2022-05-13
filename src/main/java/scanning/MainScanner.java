@@ -33,7 +33,7 @@ public class MainScanner {
     // Tracks whether the scanner is at the start of the line
     private boolean isLineStart = true;
     // Tracks the indentation level of the line
-    private int indentationLevel = 0;
+    private IndentationState indentationLevel = new IndentationState();
 
     public MainScanner(String input) {
         this.input = input;
@@ -98,7 +98,7 @@ public class MainScanner {
         // Handle indentation
         // If it is a new line, and the current indentation level is greater than 0,
         //  then there should probably be a dedent
-        else if (isLineStart && (nextChar == ' ' || indentationLevel > 0)) {
+        else if (isLineStart && (nextChar == ' ' || indentationLevel.get() > 0)) {
 
             int newIndentationLevel = 0;
             while (peek() == ' ') {
@@ -120,14 +120,15 @@ public class MainScanner {
             }
 
             // Check current indentation level. If the new level is higher, emit an INDENT token
-            if (newIndentationLevel > indentationLevel) {
-                indentationLevel = newIndentationLevel;
+            if (newIndentationLevel > indentationLevel.get()) {
+                indentationLevel.increaseTo(newIndentationLevel);
                 isLineStart = false;
                 return new Token(TokenType.Indent, "", lineNumber, position);
             }
             // If it is lower, emit a DEDENT token
-            else if (newIndentationLevel < indentationLevel) {
-                indentationLevel = newIndentationLevel;
+            else if (newIndentationLevel < indentationLevel.get()) {
+                // TODO: Handle multiple decreases
+                indentationLevel.decreaseTo(newIndentationLevel);
                 isLineStart = false;
                 return new Token(TokenType.Dedent, "", lineNumber, position);
             }
@@ -137,9 +138,11 @@ public class MainScanner {
             }
         }
         else if (nextChar == '\n') {
-            position++;
+            while (peek() == '\n') {
+                position++;
+                lineNumber++;
+            }
             isLineStart = true;
-            lineNumber++;
             return nextToken();
         }
 
