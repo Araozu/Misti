@@ -89,7 +89,62 @@ public class MainScanner {
         }
         char nextChar = peek();
 
-        // TODO: check current char and decide which scanner to use
+
+        // Handle whitespace
+        if (!isLineStart && nextChar == ' ') {
+            while (peek() == ' ') position++;
+            return nextToken();
+        }
+        // Handle indentation
+        // If it is a new line, and the current indentation level is greater than 0,
+        //  then there should probably be a dedent
+        else if (isLineStart && (nextChar == ' ' || indentationLevel > 0)) {
+
+            int newIndentationLevel = 0;
+            while (peek() == ' ') {
+                newIndentationLevel++;
+                position++;
+            }
+
+            // If the next char is \0, then we reached EOF. There is nothing to indent/dedent
+            if (peek() == '\0') {
+                return nextToken();
+            }
+
+            // If:
+            // - this is not a new line where indentation drops to 0
+            // - the next char is a new line
+            // return, as there is nothing to indent/dedent
+            if (newIndentationLevel != 0 && peek() == '\n') {
+                return nextToken();
+            }
+
+            // Check current indentation level. If the new level is higher, emit an INDENT token
+            if (newIndentationLevel > indentationLevel) {
+                indentationLevel = newIndentationLevel;
+                isLineStart = false;
+                return new Token(TokenType.Indent, "", lineNumber, position);
+            }
+            // If it is lower, emit a DEDENT token
+            else if (newIndentationLevel < indentationLevel) {
+                indentationLevel = newIndentationLevel;
+                isLineStart = false;
+                return new Token(TokenType.Dedent, "", lineNumber, position);
+            }
+            // If it is the same, do nothing
+            else {
+                return nextToken();
+            }
+        }
+        else if (nextChar == '\n') {
+            position++;
+            isLineStart = true;
+            lineNumber++;
+            return nextToken();
+        }
+
+        // At this point, it is safe to assume it is not the start of a line
+        isLineStart = false;
 
         // Check for number - integer of float
         if (Utils.isDigit(nextChar)) {
@@ -111,19 +166,6 @@ public class MainScanner {
             Token t = op.scan();
             this.position = op.getPosition();
             return t;
-        }
-        // If whitespace is found at the start of the line, update the indentation level
-        // TODO: Emit INDENT and DEDENT tokens
-        else if (nextChar == ' ' && isLineStart) {
-            indentationLevel++;
-            position++;
-            return nextToken();
-        }
-        else if (nextChar == '\n') {
-            position++;
-            isLineStart = true;
-            lineNumber++;
-            return nextToken();
         }
         // No adequate scanner found, or implemented.
         else {

@@ -122,4 +122,54 @@ public class MainScannerTest {
         assertEquals(TokenType.EOF, tokens.get(17).type);
     }
 
+    @Test
+    @DisplayName("should emit INDENT")
+    void t6() {
+        MainScanner mainScanner = new MainScanner("id1 id2\n    id3 id4");
+        ArrayList<Token> tokens = mainScanner.tokens();
+
+        assertEquals(TokenType.Indent, tokens.get(2).type);
+    }
+
+    @Test
+    @DisplayName("should emit DEDENT")
+    void t7() {
+        MainScanner mainScanner = new MainScanner("id1 id2\n    id3 id4\nid5 id6");
+        ArrayList<Token> tokens = mainScanner.tokens();
+
+        assertEquals(TokenType.Indent, tokens.get(2).type);
+        assertEquals(TokenType.Dedent, tokens.get(5).type);
+    }
+
+    @Test
+    @DisplayName("should emit multipe INDENT")
+    void t8() {
+        MainScanner mainScanner = new MainScanner("id1 id2\n    id3 id4\n        id5 id6");
+        ArrayList<Token> tokens = mainScanner.tokens();
+
+        assertEquals(TokenType.Indent, tokens.get(2).type);
+        assertEquals(TokenType.Indent, tokens.get(5).type);
+    }
+
+    @Test
+    @DisplayName("an input with only indentation should not emit INDENT or DEDENT")
+    void t9() {
+        MainScanner mainScanner = new MainScanner("    ");
+        ArrayList<Token> tokens = mainScanner.tokens();
+
+        assertEquals(TokenType.EOF, tokens.get(0).type);
+
+        tokens = new MainScanner("    \n").tokens();
+        assertEquals(TokenType.EOF, tokens.get(0).type);
+
+        tokens = new MainScanner("    \n    ").tokens();
+        assertEquals(TokenType.EOF, tokens.get(0).type);
+
+        tokens = new MainScanner("\n\n\n    \n        \n\n").tokens();
+        assertEquals(TokenType.EOF, tokens.get(0).type);
+    }
+
+    // TODO: If, there is 2 levels of indentation, 4 spaces each, when dedenting by 8 spaces,
+    //       it should emit 2 DEDENT tokens
+    // TODO: DEDENT should take into consideration if the number of chars matches with a previous level
 }
