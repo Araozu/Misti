@@ -18,7 +18,7 @@ package scanning.scanner;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import scanning.Scanner;
+import scanning.MainScanner;
 import scanning.Token;
 import scanning.TokenType;
 
@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class NumberScannerTest {
 
     private static Token getTokenOf(String s) {
-        return new NumberScanner(new Scanner(s)).scan();
+        return new NumberScanner(new MainScanner(s)).scan();
     }
 
     private static String valueOf(String s) {
@@ -38,7 +38,7 @@ public class NumberScannerTest {
     @DisplayName("should throw if input is null")
     public void shouldThrowIfInputIsNull() {
         try {
-            new NumberScanner(new Scanner(null));
+            new NumberScanner(new MainScanner(null));
             Assertions.fail("scan did not throw with null input");
         } catch (RuntimeException e) {
             assertEquals("NumberScanner: Input is null", e.getMessage());
@@ -48,21 +48,21 @@ public class NumberScannerTest {
     @Test
     @DisplayName("should scan a simple integer")
     public void shouldScanSimpleInteger() {
-        Token result = new NumberScanner(new Scanner("123")).scan();
+        Token result = new NumberScanner(new MainScanner("123")).scan();
         Assertions.assertNotNull(result);
         assertEquals(TokenType.Integer, result.type);
         assertEquals("123", result.value);
         assertEquals(0, result.lineNumber);
         assertEquals(0, result.position);
 
-        result = new NumberScanner(new Scanner("0123")).scan();
+        result = new NumberScanner(new MainScanner("0123")).scan();
         Assertions.assertNotNull(result);
         assertEquals(TokenType.Integer, result.type);
         assertEquals("0123", result.value);
         assertEquals(0, result.lineNumber);
         assertEquals(0, result.position);
 
-        result = new NumberScanner(new Scanner("0123 45")).scan();
+        result = new NumberScanner(new MainScanner("0123 45")).scan();
         Assertions.assertNotNull(result);
         assertEquals(TokenType.Integer, result.type);
         assertEquals("0123", result.value);
@@ -73,7 +73,7 @@ public class NumberScannerTest {
     @Test
     @DisplayName("should scan a hex value")
     public void shouldScanAHexValue(){
-        Token result = new NumberScanner(new Scanner("0x20")).scan();
+        Token result = new NumberScanner(new MainScanner("0x20")).scan();
         Assertions.assertNotNull(result);
         assertEquals(TokenType.Integer, result.type);
         assertEquals("0x20", result.value);
@@ -86,21 +86,21 @@ public class NumberScannerTest {
     @Test
     @DisplayName("should not scan an incomplete hex value")
     public void shouldNotScanAnIncompleteHexValue(){
-        Token result = new NumberScanner(new Scanner("0 x20")).scan();
+        Token result = new NumberScanner(new MainScanner("0 x20")).scan();
         Assertions.assertNotNull(result);
         assertEquals(TokenType.Integer, result.type);
         assertEquals("0", result.value);
         assertEquals(0, result.lineNumber);
         assertEquals(0, result.position);
 
-        result = new NumberScanner(new Scanner("0x 20")).scan();
+        result = new NumberScanner(new MainScanner("0x 20")).scan();
         Assertions.assertNotNull(result);
         assertEquals(TokenType.Integer, result.type);
         assertEquals("0", result.value);
         assertEquals(0, result.lineNumber);
         assertEquals(0, result.position);
 
-        result = new NumberScanner(new Scanner("0 x 20")).scan();
+        result = new NumberScanner(new MainScanner("0 x 20")).scan();
         Assertions.assertNotNull(result);
         assertEquals(TokenType.Integer, result.type);
         assertEquals("0", result.value);
@@ -118,7 +118,7 @@ public class NumberScannerTest {
     @Test
     @DisplayName("should not consume an unneeded character in an invalid hex")
     void t1() {
-        var scanner = new NumberScanner(new Scanner("0x 1"));
+        var scanner = new NumberScanner(new MainScanner("0x 1"));
         Token result = scanner.scan();
         Assertions.assertNotNull(result);
         assertEquals("0", result.value);
@@ -128,7 +128,7 @@ public class NumberScannerTest {
     @Test
     @DisplayName("should not consume an unneeded char after scanning 0")
     void t3() {
-        var sc = new NumberScanner(new Scanner("0 a"));
+        var sc = new NumberScanner(new MainScanner("0 a"));
         var result = sc.scan();
         assertEquals("0", result.value);
         assertEquals(1, sc.position);

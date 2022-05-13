@@ -15,7 +15,7 @@
 
 package scanning.scanner;
 
-import scanning.Scanner;
+import scanning.MainScanner;
 import scanning.Token;
 import scanning.TokenType;
 
@@ -30,20 +30,11 @@ public abstract class AbstractScanner {
      */
     private final StringBuilder currentValue = new StringBuilder();
 
-    protected AbstractScanner(Scanner scanner) {
-        input = scanner.getInput();
-        position = scanner.getPosition();
-        lineNumber = scanner.getLineNumber();
-
-        if (input == null) {
-            throw new RuntimeException("AbstractScanner: Input is null");
-        }
-        if (position < 0) {
-            throw new RuntimeException("AbstractScanner: Start position is negative");
-        }
-        if (lineNumber < 0) {
-            throw new RuntimeException("AbstractScanner: Line number is negative");
-        }
+    protected AbstractScanner(MainScanner mainScanner) {
+        // If mainScanner didn't throw, these values are valid
+        input = mainScanner.getInput();
+        position = mainScanner.getPosition();
+        lineNumber = mainScanner.getLineNumber();
 
         startPosition = position;
         inputSize = input.length();

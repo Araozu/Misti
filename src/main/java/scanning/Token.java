@@ -39,8 +39,4 @@ public class Token {
         this.position = position;
     }
 
-    public int length() {
-        return value.length();
-    }
-
 }

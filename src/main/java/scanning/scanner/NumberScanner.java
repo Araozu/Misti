@@ -15,7 +15,7 @@
 
 package scanning.scanner;
 
-import scanning.Scanner;
+import scanning.MainScanner;
 import scanning.Token;
 import scanning.TokenType;
 
@@ -30,8 +30,8 @@ import static scanning.Utils.isHexDigit;
  * so it doesn't handle whitespace or indentation.
  */
 public class NumberScanner extends AbstractScanner {
-    public NumberScanner(Scanner scanner) {
-        super(scanner);
+    public NumberScanner(MainScanner mainScanner) {
+        super(mainScanner);
     }
 
     private Token scanFloatingPoint() {

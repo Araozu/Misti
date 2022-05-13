@@ -17,7 +17,7 @@ package scanning.scanner;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import scanning.Scanner;
+import scanning.MainScanner;
 import scanning.Token;
 import scanning.TokenType;
 
@@ -28,11 +28,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class IdentifierScannerTest {
 
     private Token tokenOf(String s) {
-        return new IdentifierScanner(new Scanner(s)).scan();
+        return new IdentifierScanner(new MainScanner(s)).scan();
     }
 
     private String valueOf(String s) {
-        return new IdentifierScanner(new Scanner(s)).scan().value;
+        return new IdentifierScanner(new MainScanner(s)).scan().value;
     }
 
     @Test

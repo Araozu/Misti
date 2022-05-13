@@ -17,7 +17,7 @@ package scanning.scanner;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import scanning.Scanner;
+import scanning.MainScanner;
 
 import java.util.ArrayList;
 
@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class OperatorScannerTest {
 
     private String valueOf(String s) {
-        return new OperatorScanner(new Scanner(s)).scan().value;
+        return new OperatorScanner(new MainScanner(s)).scan().value;
     }
 
     @Test

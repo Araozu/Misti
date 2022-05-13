@@ -23,38 +23,38 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ScannerTest {
+public class MainScannerTest {
 
     @Test
     @DisplayName("tokens should not return null")
     public void testTokensNotNull() {
-        var lexer = new Scanner("");
+        var lexer = new MainScanner("");
         Assertions.assertNotNull(lexer.tokens());
     }
 
     @Test
     @DisplayName("tokens should return an EOF token if the input has no tokens")
     public void testTokensEmptyInput() {
-        Scanner scanner;
+        MainScanner mainScanner;
         ArrayList<Token> tokens;
 
-        scanner = new Scanner("");
-        tokens = scanner.tokens();
+        mainScanner = new MainScanner("");
+        tokens = mainScanner.tokens();
         Assertions.assertEquals(1, tokens.size());
         Assertions.assertEquals(TokenType.EOF, tokens.get(0).type);
 
-        scanner = new Scanner(" ");
-        tokens = scanner.tokens();
+        mainScanner = new MainScanner(" ");
+        tokens = mainScanner.tokens();
         Assertions.assertEquals(1, tokens.size());
         Assertions.assertEquals(TokenType.EOF, tokens.get(0).type);
 
-        scanner = new Scanner("  ");
-        tokens = scanner.tokens();
+        mainScanner = new MainScanner("  ");
+        tokens = mainScanner.tokens();
         Assertions.assertEquals(1, tokens.size());
         Assertions.assertEquals(TokenType.EOF, tokens.get(0).type);
 
-        scanner = new Scanner("\n");
-        tokens = scanner.tokens();
+        mainScanner = new MainScanner("\n");
+        tokens = mainScanner.tokens();
         Assertions.assertEquals(1, tokens.size());
         Assertions.assertEquals(TokenType.EOF, tokens.get(0).type);
     }
@@ -62,26 +62,27 @@ public class ScannerTest {
     @Test
     @DisplayName("should scan numbers")
     void testNextInteger() {
-        Scanner scanner;
+        MainScanner mainScanner;
         ArrayList<Token> tokens;
 
-        scanner = new Scanner("126 278.98 0.282398 1798e+1 239.3298e-103");
-        tokens = scanner.tokens();
+        mainScanner = new MainScanner("126 278.98 0.282398 1798e+1 239.3298e-103");
+        tokens = mainScanner.tokens();
         assertEquals("126", tokens.get(0).value);
         assertEquals("278.98", tokens.get(1).value);
         assertEquals("0.282398", tokens.get(2).value);
         assertEquals("1798e+1", tokens.get(3).value);
         assertEquals("239.3298e-103", tokens.get(4).value);
+        assertEquals(TokenType.EOF, tokens.get(5).type);
     }
 
     @Test
     @DisplayName("should scan identifiers")
     void t4() {
-        Scanner scanner;
+        MainScanner mainScanner;
         ArrayList<Token> tokens;
 
-        scanner = new Scanner("_ i j number number2 _ignored camelCase sneak_case_10");
-        tokens = scanner.tokens();
+        mainScanner = new MainScanner("_ i j number number2 _ignored camelCase sneak_case_10");
+        tokens = mainScanner.tokens();
         assertEquals("_", tokens.get(0).value);
         assertEquals("i", tokens.get(1).value);
         assertEquals("j", tokens.get(2).value);
@@ -90,16 +91,17 @@ public class ScannerTest {
         assertEquals("_ignored", tokens.get(5).value);
         assertEquals("camelCase", tokens.get(6).value);
         assertEquals("sneak_case_10", tokens.get(7).value);
+        assertEquals(TokenType.EOF, tokens.get(8).type);
     }
 
     @Test
     @DisplayName("should scan operators")
     void t5() {
-        Scanner scanner;
+        MainScanner mainScanner;
         ArrayList<Token> tokens;
 
-        scanner = new Scanner("+ - * / % += -= *= /= ** *** <- <= >= => -> <$>");
-        tokens = scanner.tokens();
+        mainScanner = new MainScanner("+ - * / % += -= *= /= ** *** <- <= >= => -> <$>");
+        tokens = mainScanner.tokens();
         assertEquals("+", tokens.get(0).value);
         assertEquals("-", tokens.get(1).value);
         assertEquals("*", tokens.get(2).value);
@@ -117,6 +119,7 @@ public class ScannerTest {
         assertEquals("=>", tokens.get(14).value);
         assertEquals("->", tokens.get(15).value);
         assertEquals("<$>", tokens.get(16).value);
+        assertEquals(TokenType.EOF, tokens.get(17).type);
     }
 
 }

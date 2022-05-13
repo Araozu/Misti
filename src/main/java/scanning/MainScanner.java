@@ -22,9 +22,10 @@ import scanning.scanner.OperatorScanner;
 
 import java.util.ArrayList;
 
-public class Scanner {
+public class MainScanner {
 
     private final String input;
+    private final int inputSize;
     // Tracks the line number
     private int lineNumber = 0;
     // Tracks the position of the lexer
@@ -34,12 +35,13 @@ public class Scanner {
     // Tracks the indentation level of the line
     private int indentationLevel = 0;
 
-    public Scanner(String input) {
+    public MainScanner(String input) {
         this.input = input;
-
         if (input == null) {
             throw new RuntimeException("NumberScanner: Input is null");
         }
+
+        this.inputSize = input.length();
     }
 
     public String getInput() {
@@ -54,26 +56,23 @@ public class Scanner {
         return position;
     }
 
-    public int getIndentationLevel() {
-        return indentationLevel;
+    private boolean hasNext() {
+        return position < inputSize;
     }
 
     public ArrayList<Token> tokens() {
         ArrayList<Token> tokens = new ArrayList<>();
-        int inputSize = input.length();
-
-        if (position >= input.length()) {
-            tokens.add(new Token(TokenType.EOF, "", lineNumber, position));
-            return tokens;
-        }
 
         // While there's still input
-        while (position < inputSize) {
+        while (hasNext()) {
             Token token = nextToken();
             // If an unknown character is found
             if (token == null) continue;
             tokens.add(token);
         }
+
+        // Add EOF
+        tokens.add(new Token(TokenType.EOF, "", lineNumber, position));
 
         return tokens;
     }
@@ -84,8 +83,9 @@ public class Scanner {
      * @return The next token
      */
     protected Token nextToken() {
-        if (position >= input.length()) {
-            return new Token(TokenType.EOF, "", lineNumber, position);
+        // Check if there's input, because this method is recursive.
+        if (!hasNext()) {
+            return null;
         }
         char nextChar = peek();
 
@@ -142,6 +142,7 @@ public class Scanner {
      * @return char at current position
      */
     protected char peek() {
+        if (!hasNext()) return '\0';
         return input.charAt(position);
     }
 

@@ -13,7 +13,7 @@
  * if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import scanning.Scanner;
+import scanning.MainScanner;
 import scanning.Token;
 
 import java.io.BufferedReader;
@@ -37,7 +37,7 @@ public class Repl {
                 if (input == null) {
                     break;
                 }
-                Scanner sc = new Scanner(input);
+                MainScanner sc = new MainScanner(input);
                 ArrayList<Token> tokens = sc.tokens();
                 for (Token t: tokens) {
                     System.out.println("[" + t.value + "]");

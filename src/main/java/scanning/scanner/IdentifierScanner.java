@@ -15,7 +15,7 @@
 
 package scanning.scanner;
 
-import scanning.Scanner;
+import scanning.MainScanner;
 import scanning.Token;
 import scanning.TokenType;
 import scanning.Utils;
@@ -23,7 +23,7 @@ import scanning.Utils;
 import java.util.HashMap;
 
 public class IdentifierScanner extends AbstractScanner {
-    public IdentifierScanner(Scanner sc) {
+    public IdentifierScanner(MainScanner sc) {
         super(sc);
     }
 

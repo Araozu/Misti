@@ -15,7 +15,7 @@
 
 package scanning.scanner;
 
-import scanning.Scanner;
+import scanning.MainScanner;
 import scanning.Token;
 import scanning.TokenType;
 
@@ -23,8 +23,8 @@ import static scanning.Utils.isOperatorChar;
 
 public class OperatorScanner extends AbstractScanner {
 
-    public OperatorScanner(Scanner scanner) {
-        super(scanner);
+    public OperatorScanner(MainScanner mainScanner) {
+        super(mainScanner);
     }
 
     @Override
