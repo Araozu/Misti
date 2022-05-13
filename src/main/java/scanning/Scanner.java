@@ -18,6 +18,7 @@ package scanning;
 import scanning.scanner.AbstractScanner;
 import scanning.scanner.IdentifierScanner;
 import scanning.scanner.NumberScanner;
+import scanning.scanner.OperatorScanner;
 
 import java.util.ArrayList;
 
@@ -102,6 +103,13 @@ public class Scanner {
             AbstractScanner sc = new IdentifierScanner(this);
             Token t = sc.scan();
             this.position = sc.getPosition();
+            return t;
+        }
+        // Check for operators
+        else if (Utils.isOperatorChar(nextChar)) {
+            OperatorScanner op = new OperatorScanner(this);
+            Token t = op.scan();
+            this.position = op.getPosition();
             return t;
         }
         // If whitespace is found at the start of the line, update the indentation level

@@ -31,4 +31,10 @@ public class Utils {
     public static boolean isHexDigit(char c) {
         return isDigit(c) || 'a' <= c && c <= 'f' || 'A' <= c && c <= 'F';
     }
+
+    public static boolean isOperatorChar(char c) {
+        return (c == '+' || c == '-' || c == '=' || c == '*' || c == '!' || c == '\\' || c == '/' || c == '|'
+                || c == '@' || c == '#' || c == '$' || c == '~' || c == '%' || c == '&' || c == '?' || c == '<'
+                || c == '>' || c == '^' || c == '.' || c == ':');
+    }
 }

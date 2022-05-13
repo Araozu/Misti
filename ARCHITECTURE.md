@@ -4,6 +4,9 @@ The code follows the structure of a typical compiler:
 
 Contains all the code related to the lexical analysis phase.
 
+The entry point is the Scanner class, it creates various Scanner objects
+as it needs them.
+
 ## `main.java.syntactic`
 
 Code related to syntactic analysis.

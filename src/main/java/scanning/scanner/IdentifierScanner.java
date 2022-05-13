@@ -22,7 +22,7 @@ import scanning.Utils;
 
 import java.util.HashMap;
 
-public class IdentifierScanner extends AbstractScanner{
+public class IdentifierScanner extends AbstractScanner {
     public IdentifierScanner(Scanner sc) {
         super(sc);
     }
@@ -45,6 +45,7 @@ public class IdentifierScanner extends AbstractScanner{
     /**
      * Scans an identifier
      * Assumes the next char is a lowercase char or an underscore.
+     *
      * @return An Identifier token
      */
     @Override

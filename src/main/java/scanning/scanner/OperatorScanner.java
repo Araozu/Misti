@@ -19,16 +19,12 @@ import scanning.Scanner;
 import scanning.Token;
 import scanning.TokenType;
 
+import static scanning.Utils.isOperatorChar;
+
 public class OperatorScanner extends AbstractScanner {
 
-    protected OperatorScanner(Scanner scanner) {
+    public OperatorScanner(Scanner scanner) {
         super(scanner);
-    }
-
-    private boolean isOperatorChar(char c) {
-        return (c == '+' || c == '-' || c == '=' || c == '*' || c == '!' || c == '\\' || c == '/' || c == '|'
-                || c == '@' || c == '#' || c == '$' || c == '~' || c == '%' || c == '&' || c == '?' || c == '<'
-                || c == '>' || c == '^' || c == '.' || c == ':');
     }
 
     @Override
