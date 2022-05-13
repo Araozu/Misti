@@ -194,28 +194,26 @@ public class MainScannerTest {
         assertEquals(TokenType.Dedent, tokens.get(7).type);
     }
 
+    /**
+     * An input like
+     * ```
+     * id1
+     * id2
+     * id3
+     * id4
+     * ```
+     * Should emit 2 indent and 2 dedent, one for id2 and another for id3
+     */
     @Test
     @DisplayName("should emit various DEDENT when the indentation decreases multiple levels")
     void t12() {
-        /**
-         * An input like
-         * ```
-         * id1
-         *     id2
-         *         id3
-         * id4
-         * ```
-         * Should emit 2 indent and 2 dedent, one for id2 and another for id3
-         */
         MainScanner mainScanner = new MainScanner("id1\n   id2\n        id3\nid4");
         ArrayList<Token> tokens = mainScanner.tokens();
         assertEquals(TokenType.Indent, tokens.get(1).type);
         assertEquals(TokenType.Indent, tokens.get(3).type);
         assertEquals(TokenType.Dedent, tokens.get(5).type);
-        // assertEquals(TokenType.Dedent, tokens.get(6).type);
+        assertEquals(TokenType.Dedent, tokens.get(6).type);
     }
 
-    // TODO: If, there is 2 levels of indentation, 4 spaces each, when dedenting by 8 spaces,
-    //       it should emit 2 DEDENT tokens
     // TODO: DEDENT should take into consideration if the number of chars matches with a previous level
 }

@@ -21,6 +21,7 @@ import scanning.scanner.NumberScanner;
 import scanning.scanner.OperatorScanner;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class MainScanner {
 
@@ -33,7 +34,7 @@ public class MainScanner {
     // Tracks whether the scanner is at the start of the line
     private boolean isLineStart = true;
     // Tracks the indentation level of the line
-    private IndentationState indentationLevel = new IndentationState();
+    private final IndentationState indentationLevel = new IndentationState();
 
     public MainScanner(String input) {
         this.input = input;
@@ -65,10 +66,10 @@ public class MainScanner {
 
         // While there's still input
         while (hasNext()) {
-            Token token = nextToken();
+            Token[] nextTokens = nextToken();
             // If an unknown character is found
-            if (token == null) continue;
-            tokens.add(token);
+            if (nextTokens == null) continue;
+            Collections.addAll(tokens, nextTokens);
         }
 
         // Add EOF
@@ -82,7 +83,7 @@ public class MainScanner {
      *
      * @return The next token
      */
-    protected Token nextToken() {
+    protected Token[] nextToken() {
         // Check if there's input, because this method is recursive.
         if (!hasNext()) {
             return null;
@@ -123,14 +124,23 @@ public class MainScanner {
             if (newIndentationLevel > indentationLevel.get()) {
                 indentationLevel.increaseTo(newIndentationLevel);
                 isLineStart = false;
-                return new Token(TokenType.Indent, "", lineNumber, position);
+
+                Token[] tokenArr = new Token[1];
+                tokenArr[0] = new Token(TokenType.Indent, "", lineNumber, position);
+                return tokenArr;
             }
             // If it is lower, emit a DEDENT token
             else if (newIndentationLevel < indentationLevel.get()) {
-                // TODO: Handle multiple decreases
-                indentationLevel.decreaseTo(newIndentationLevel);
+                // TODO: Emit an error if the indentation is incorrect
+                int levelsDecreased = indentationLevel.decreaseTo(newIndentationLevel);
+
+                Token[] tokenArr = new Token[levelsDecreased];
+                for (int i = 0; i < levelsDecreased; i++) {
+                    tokenArr[i] = new Token(TokenType.Dedent, "", lineNumber, position);
+                }
+
                 isLineStart = false;
-                return new Token(TokenType.Dedent, "", lineNumber, position);
+                return tokenArr;
             }
             // If it is the same, do nothing
             else {
@@ -154,21 +164,30 @@ public class MainScanner {
             AbstractScanner sc = new NumberScanner(this);
             Token t = sc.scan();
             this.position = sc.getPosition();
-            return t;
+
+            Token[] tokenArr = new Token[1];
+            tokenArr[0] = t;
+            return tokenArr;
         }
         // Check for identifier/keyword
         else if (Utils.isLowercase(nextChar) || nextChar == '_') {
             AbstractScanner sc = new IdentifierScanner(this);
             Token t = sc.scan();
             this.position = sc.getPosition();
-            return t;
+
+            Token[] tokenArr = new Token[1];
+            tokenArr[0] = t;
+            return tokenArr;
         }
         // Check for operators
         else if (Utils.isOperatorChar(nextChar)) {
             OperatorScanner op = new OperatorScanner(this);
             Token t = op.scan();
             this.position = op.getPosition();
-            return t;
+
+            Token[] tokenArr = new Token[1];
+            tokenArr[0] = t;
+            return tokenArr;
         }
         // No adequate scanner found, or implemented.
         else {
