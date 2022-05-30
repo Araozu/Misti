@@ -54,4 +54,17 @@ public class StringScannerTest {
         var nextPosition = stringScanner.getPosition();
         assertEquals(8, nextPosition);
     }
+
+    @Test
+    @DisplayName("should scan escape characters")
+    void t4() {
+        assertEquals("Sample\ntext", valueOf("\"Sample\\ntext\""));
+        assertEquals("Sample'text", valueOf("\"Sample\\'text\""));
+        assertEquals("Sample\"text", valueOf("\"Sample\\\"text\""));
+        assertEquals("Sample\rtext", valueOf("\"Sample\\rtext\""));
+        assertEquals("Sample\\text", valueOf("\"Sample\\\\text\""));
+        assertEquals("Sample\ftext", valueOf("\"Sample\\ftext\""));
+        assertEquals("Sample\btext", valueOf("\"Sample\\btext\""));
+        assertEquals("Sample\ttext", valueOf("\"Sample\\ttext\""));
+    }
 }

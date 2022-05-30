@@ -124,4 +124,6 @@ public class IndentationStateTest {
         var levelsDecreased = state.decreaseTo(4);
         assertEquals(4, state.get());
     }
+
+    // TODO: What happens if indentation is decreased to an illegal state?
 }

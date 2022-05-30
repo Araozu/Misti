@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021
+ * Copyright (c) 2021-2022
  * Fernando Enrique Araoz Morales.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
@@ -17,6 +17,7 @@ package scanning;
 
 import error.AbstractError;
 import error.ErrorList;
+import error.ScannerError;
 import scanning.scanner.AbstractScanner;
 import scanning.scanner.IdentifierScanner;
 import scanning.scanner.NumberScanner;
@@ -38,7 +39,7 @@ public class MainScanner {
     private boolean isLineStart = true;
     // Tracks the indentation level of the line
     private final IndentationState indentationLevel = new IndentationState();
-    private ErrorList errorList;
+    private final ErrorList errorList;
 
     public MainScanner(String input, ErrorList errorList) {
         this.input = input;
@@ -117,7 +118,7 @@ public class MainScanner {
         // If it is a new line, and the current indentation level is greater than 0,
         //  then there should probably be a dedent
         else if (isLineStart && (nextChar == ' ' || indentationLevel.get() > 0)) {
-
+            // TODO: Extract to its own file
             int newIndentationLevel = 0;
             while (peek() == ' ') {
                 newIndentationLevel++;
@@ -148,8 +149,13 @@ public class MainScanner {
             }
             // If it is lower, emit a DEDENT token
             else if (newIndentationLevel < indentationLevel.get()) {
-                // TODO: Emit an error if the indentation is incorrect
                 int levelsDecreased = indentationLevel.decreaseTo(newIndentationLevel);
+                if (levelsDecreased == -1) {
+                    // TODO: specify what happens next
+                    addError(new ScannerError("Wrong indentation detected."));
+                    // This should be other value
+                    levelsDecreased = 0;
+                }
 
                 Token[] tokenArr = new Token[levelsDecreased];
                 for (int i = 0; i < levelsDecreased; i++) {
