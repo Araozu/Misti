@@ -15,6 +15,8 @@
 
 package scanning;
 
+import error.AbstractError;
+import error.ErrorList;
 import scanning.scanner.AbstractScanner;
 import scanning.scanner.IdentifierScanner;
 import scanning.scanner.NumberScanner;
@@ -22,6 +24,7 @@ import scanning.scanner.OperatorScanner;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class MainScanner {
 
@@ -35,14 +38,20 @@ public class MainScanner {
     private boolean isLineStart = true;
     // Tracks the indentation level of the line
     private final IndentationState indentationLevel = new IndentationState();
+    private ErrorList errorList;
 
-    public MainScanner(String input) {
+    public MainScanner(String input, ErrorList errorList) {
         this.input = input;
         if (input == null) {
             throw new RuntimeException("NumberScanner: Input is null");
         }
 
         this.inputSize = input.length();
+        this.errorList = errorList;
+    }
+
+    public MainScanner(String input) {
+        this(input, new ErrorList());
     }
 
     public String getInput() {
@@ -55,6 +64,14 @@ public class MainScanner {
 
     public int getPosition() {
         return position;
+    }
+
+    public List<AbstractError> getErrorList() {
+        return errorList.getErrors();
+    }
+
+    public void addError(AbstractError error) {
+        errorList.addError(error);
     }
 
     private boolean hasNext() {

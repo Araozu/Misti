@@ -23,8 +23,8 @@ import scanning.Utils;
 import java.util.HashMap;
 
 public class IdentifierScanner extends AbstractScanner {
-    public IdentifierScanner(MainScanner sc) {
-        super(sc);
+    public IdentifierScanner(MainScanner mainScanner) {
+        super(mainScanner);
     }
 
     public static final HashMap<String, TokenType> keywords = new HashMap<>();

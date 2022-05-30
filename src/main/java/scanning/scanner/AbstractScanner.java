@@ -15,6 +15,7 @@
 
 package scanning.scanner;
 
+import error.ScannerError;
 import scanning.MainScanner;
 import scanning.Token;
 import scanning.TokenType;
@@ -29,6 +30,7 @@ public abstract class AbstractScanner {
      * Stores the value of the token currently being scanned
      */
     private final StringBuilder currentValue = new StringBuilder();
+    private MainScanner mainScanner;
 
     protected AbstractScanner(MainScanner mainScanner) {
         // If mainScanner didn't throw, these values are valid
@@ -38,6 +40,7 @@ public abstract class AbstractScanner {
 
         startPosition = position;
         inputSize = input.length();
+        this.mainScanner = mainScanner;
     }
 
     public int getPosition() {
@@ -46,6 +49,10 @@ public abstract class AbstractScanner {
 
     protected String getCurrentValue() {
         return currentValue.toString();
+    }
+
+    protected void addError(ScannerError error) {
+        mainScanner.addError(error);
     }
 
     /**

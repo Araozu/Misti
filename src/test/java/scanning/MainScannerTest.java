@@ -198,11 +198,11 @@ public class MainScannerTest {
      * An input like
      * ```
      * id1
-     * id2
-     * id3
+     * __id2
+     * ____id3
      * id4
      * ```
-     * Should emit 2 indent and 2 dedent, one for id2 and another for id3
+     * Should emit 2 indent, one for id2 and another for id3, and 2 dedent
      */
     @Test
     @DisplayName("should emit various DEDENT when the indentation decreases multiple levels")
@@ -215,5 +215,4 @@ public class MainScannerTest {
         assertEquals(TokenType.Dedent, tokens.get(6).type);
     }
 
-    // TODO: DEDENT should take into consideration if the number of chars matches with a previous level
 }
