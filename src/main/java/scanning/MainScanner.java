@@ -18,10 +18,7 @@ package scanning;
 import error.AbstractError;
 import error.ErrorList;
 import error.ScannerError;
-import scanning.scanner.AbstractScanner;
-import scanning.scanner.IdentifierScanner;
-import scanning.scanner.NumberScanner;
-import scanning.scanner.OperatorScanner;
+import scanning.scanner.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
