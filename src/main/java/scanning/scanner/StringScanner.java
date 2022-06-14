@@ -23,7 +23,7 @@ import scanning.TokenType;
 public class StringScanner extends AbstractScanner {
     static final String UNEXPECTED_NEW_LINE_MSG = "Unexpected new line inside a string.";
 
-    protected StringScanner(MainScanner mainScanner) {
+    public StringScanner(MainScanner mainScanner) {
         super(mainScanner);
     }
 
@@ -73,8 +73,6 @@ public class StringScanner extends AbstractScanner {
     public Token scan() {
         // Consume opening quote
         next();
-
-        // TODO: escape characters
 
         while (true) {
             char c = peek1();

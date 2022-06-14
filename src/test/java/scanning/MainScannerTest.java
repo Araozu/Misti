@@ -215,4 +215,16 @@ public class MainScannerTest {
         assertEquals(TokenType.Dedent, tokens.get(6).type);
     }
 
+    @Test
+    @DisplayName("should scan strings")
+    void t13() {
+        MainScanner mainScanner;
+        ArrayList<Token> tokens;
+
+        mainScanner = new MainScanner("\"Hello\" \"world\"");
+        tokens = mainScanner.tokens();
+        assertEquals("Hello", tokens.get(0).value);
+        assertEquals("world", tokens.get(1).value);
+        assertEquals(TokenType.EOF, tokens.get(2).type);
+    }
 }

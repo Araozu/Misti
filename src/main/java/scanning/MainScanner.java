@@ -199,6 +199,16 @@ public class MainScanner {
             tokenArr[0] = t;
             return tokenArr;
         }
+        // Check for string
+        else if (nextChar == '"') {
+            StringScanner sc = new StringScanner(this);
+            Token t = sc.scan();
+            this.position = sc.getPosition();
+
+            Token[] tokenArr = new Token[1];
+            tokenArr[0] = t;
+            return tokenArr;
+        }
         // Check for operators
         else if (Utils.isOperatorChar(nextChar)) {
             OperatorScanner op = new OperatorScanner(this);
