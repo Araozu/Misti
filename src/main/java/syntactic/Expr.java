@@ -52,4 +52,12 @@ public abstract class Expr {
             this.token = token;
         }
     }
+
+    static class Unit extends Expr {
+        final Token token;
+
+        Unit(Token token) {
+            this.token = token;
+        }
+    }
 }

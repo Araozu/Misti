@@ -89,4 +89,18 @@ public class ParserTest {
         assertEquals("name", numberExpr.token.value);
         assertEquals(TokenType.Identifier, numberExpr.token.type);
     }
+
+    @Test
+    @DisplayName("should parse unit")
+    void t5() {
+        Expr result = getExpression("()");
+
+        if (!(result instanceof Expr.Unit)) {
+            fail(typeError("Unit"));
+        }
+
+        Expr.Unit numberExpr = (Expr.Unit) result;
+        assertEquals("()", numberExpr.token.value);
+        assertEquals(TokenType.Unit, numberExpr.token.type);
+    }
 }

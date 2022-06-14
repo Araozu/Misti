@@ -42,6 +42,9 @@ public class Parser {
                 case Identifier: {
                     return new Expr.Identifier(nextToken);
                 }
+                case Unit: {
+                    return new Expr.Unit(nextToken);
+                }
                 default: {
                     return null;
                 }

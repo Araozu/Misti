@@ -227,4 +227,16 @@ public class MainScannerTest {
         assertEquals("world", tokens.get(1).value);
         assertEquals(TokenType.EOF, tokens.get(2).type);
     }
+
+    @Test
+    @DisplayName("should scan unit")
+    void t14() {
+        MainScanner mainScanner;
+        ArrayList<Token> tokens;
+
+        mainScanner = new MainScanner("()");
+        tokens = mainScanner.tokens();
+        assertEquals("()", tokens.get(0).value);
+        assertEquals(TokenType.EOF, tokens.get(1).type);
+    }
 }
