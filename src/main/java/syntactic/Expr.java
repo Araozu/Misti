@@ -18,23 +18,37 @@ package syntactic;
 import scanning.Token;
 
 public abstract class Expr {
-    static class IntegerExpr extends Expr {
+    private Expr() {
+    }
+
+    static class Integer extends Expr {
         final Token token;
-        IntegerExpr(Token token) {
+
+        Integer(Token token) {
             this.token = token;
         }
     }
 
-    static class FloatingExpr extends Expr {
+    static class Floating extends Expr {
         final Token token;
-        FloatingExpr(Token token) {
+
+        Floating(Token token) {
             this.token = token;
         }
     }
 
-    static class StringExpr extends Expr {
+    static class String extends Expr {
         final Token token;
-        StringExpr(Token token) {
+
+        String(Token token) {
+            this.token = token;
+        }
+    }
+
+    static class Identifier extends Expr {
+        final Token token;
+
+        Identifier(Token token) {
             this.token = token;
         }
     }

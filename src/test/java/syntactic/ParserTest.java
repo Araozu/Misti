@@ -15,7 +15,6 @@
 
 package syntactic;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import scanning.MainScanner;
@@ -25,10 +24,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 public class ParserTest {
-    public static Expr getExpression(String input) {
+    static Expr getExpression(String input) {
         MainScanner mainScanner = new MainScanner(input);
         Parser parser = new Parser(mainScanner);
         return parser.parse();
+    }
+
+    static String typeError(String type) {
+        return "Result not instance of Expr." + type;
     }
 
     @Test
@@ -36,11 +39,11 @@ public class ParserTest {
     void t1() {
         Expr result = getExpression("200");
 
-        if (!(result instanceof Expr.IntegerExpr)) {
-            fail("Result not instance of IntegerExpr");
+        if (!(result instanceof Expr.Integer)) {
+            fail(typeError("Integer"));
         }
 
-        Expr.IntegerExpr numberExpr = (Expr.IntegerExpr) result;
+        Expr.Integer numberExpr = (Expr.Integer) result;
         assertEquals("200", numberExpr.token.value);
         assertEquals(TokenType.Integer, numberExpr.token.type);
     }
@@ -50,11 +53,11 @@ public class ParserTest {
     void t2() {
         Expr result = getExpression("199.34");
 
-        if (!(result instanceof Expr.FloatingExpr)) {
-            fail("Result not instance of FloatingExpr");
+        if (!(result instanceof Expr.Floating)) {
+            fail(typeError("Floating"));
         }
 
-        Expr.FloatingExpr numberExpr = (Expr.FloatingExpr) result;
+        Expr.Floating numberExpr = (Expr.Floating) result;
         assertEquals("199.34", numberExpr.token.value);
         assertEquals(TokenType.Floating, numberExpr.token.type);
     }
@@ -64,12 +67,26 @@ public class ParserTest {
     void t3() {
         Expr result = getExpression("\"Hello, world!\"");
 
-        if (!(result instanceof Expr.StringExpr)) {
-            fail("Result not instance of StringExpr");
+        if (!(result instanceof Expr.String)) {
+            fail(typeError("String"));
         }
 
-        Expr.StringExpr numberExpr = (Expr.StringExpr) result;
+        Expr.String numberExpr = (Expr.String) result;
         assertEquals("Hello, world!", numberExpr.token.value);
         assertEquals(TokenType.String, numberExpr.token.type);
+    }
+
+    @Test
+    @DisplayName("should parse an identifier")
+    void t4() {
+        Expr result = getExpression("name");
+
+        if (!(result instanceof Expr.Identifier)) {
+            fail(typeError("Identifier"));
+        }
+
+        Expr.Identifier numberExpr = (Expr.Identifier) result;
+        assertEquals("name", numberExpr.token.value);
+        assertEquals(TokenType.Identifier, numberExpr.token.type);
     }
 }

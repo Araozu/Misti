@@ -31,13 +31,16 @@ public class Parser {
         for (Token nextToken: mainScanner.tokens()) {
             switch (nextToken.type) {
                 case Integer: {
-                    return new Expr.IntegerExpr(nextToken);
+                    return new Expr.Integer(nextToken);
                 }
                 case Floating: {
-                    return new Expr.FloatingExpr(nextToken);
+                    return new Expr.Floating(nextToken);
                 }
                 case String: {
-                    return new Expr.StringExpr(nextToken);
+                    return new Expr.String(nextToken);
+                }
+                case Identifier: {
+                    return new Expr.Identifier(nextToken);
                 }
                 default: {
                     return null;
