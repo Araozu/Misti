@@ -18,9 +18,6 @@ package syntactic;
 import scanning.Token;
 
 public abstract class Expr {
-    private Expr() {
-    }
-
     static class Integer extends Expr {
         final Token token;
 
