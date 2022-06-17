@@ -239,4 +239,29 @@ public class MainScannerTest {
         assertEquals("()", tokens.get(0).value);
         assertEquals(TokenType.EOF, tokens.get(1).type);
     }
+
+    @Test
+    @DisplayName("should scan grouping signs")
+    void t15() {
+        MainScanner mainScanner;
+        ArrayList<Token> tokens;
+
+        mainScanner = new MainScanner("(10)");
+        tokens = mainScanner.tokens();
+        assertEquals("(", tokens.get(0).value);
+        assertEquals(")", tokens.get(2).value);
+        assertEquals(TokenType.EOF, tokens.get(3).type);
+
+        mainScanner = new MainScanner("{10}");
+        tokens = mainScanner.tokens();
+        assertEquals("{", tokens.get(0).value);
+        assertEquals("}", tokens.get(2).value);
+        assertEquals(TokenType.EOF, tokens.get(3).type);
+
+        mainScanner = new MainScanner("[10]");
+        tokens = mainScanner.tokens();
+        assertEquals("[", tokens.get(0).value);
+        assertEquals("]", tokens.get(2).value);
+        assertEquals(TokenType.EOF, tokens.get(3).type);
+    }
 }

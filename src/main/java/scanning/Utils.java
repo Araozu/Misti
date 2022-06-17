@@ -37,4 +37,8 @@ public class Utils {
                 || c == '@' || c == '#' || c == '$' || c == '~' || c == '%' || c == '&' || c == '?' || c == '<'
                 || c == '>' || c == '^' || c == '.' || c == ':');
     }
+
+    public static boolean isGroupingSign(char c) {
+        return (c == '(' || c == ')' || c == '{' || c == '}' || c == '[' || c == ']');
+    }
 }

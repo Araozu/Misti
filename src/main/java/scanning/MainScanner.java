@@ -218,10 +218,7 @@ public class MainScanner {
             Token[] tokenArr = new Token[1];
             tokenArr[0] = t;
             return tokenArr;
-        }
-        // Check for grouping signs
-        // TODO: complete the other signs
-        else if (nextChar == '(') {
+        } else if (Utils.isGroupingSign(nextChar)) {
             GroupingSignScanner sc = new GroupingSignScanner(this);
             Token t = sc.scan();
             this.position = sc.getPosition();
