@@ -31,16 +31,46 @@ public class GroupingSignScanner extends AbstractScanner {
      */
     @Override
     public Token scan() {
-        switch (next()) {
+        switch (peek1()) {
             case '(': {
+                // Consume open parentheses
+                next();
+                // Consume possible whitespace
+                while (peek1() == ' ') next();
+
                 if (peek1() == ')') {
-                    // consume closing paren, create unit token
+                    // consume closing parentheses, create unit token
                     append('(');
                     append(next());
                     return create(TokenType.Unit);
+                } else {
+                    append('(');
+                    return create(TokenType.ParenOpen);
                 }
             }
+            case ')': {
+                append(next());
+                return create(TokenType.ParenClosed);
+            }
+            case '[': {
+                append(next());
+                return create(TokenType.BracketOpen);
+            }
+            case ']': {
+                append(next());
+                return create(TokenType.BracketClosed);
+            }
+            case '{': {
+                append(next());
+                return create(TokenType.BraceOpen);
+            }
+            case '}': {
+                append(next());
+                return create(TokenType.BraceClosed);
+            }
         }
-        return null;
+        // Should never happen
+        throw new RuntimeException("Illegal Scanner state: tried to scan a grouping sign " +
+                "but none was found");
     }
 }

@@ -25,8 +25,15 @@ public enum TokenType {
     String,
     Unit,
     Operator,
-    GroupingOpen,
-    GroupingClose,
+    // Parentheses
+    ParenOpen,
+    ParenClosed,
+    // Brackets
+    BracketOpen,
+    BracketClosed,
+    // Braces
+    BraceOpen,
+    BraceClosed,
     EOF,
     // Indicates an increase in indentation
     Indent,

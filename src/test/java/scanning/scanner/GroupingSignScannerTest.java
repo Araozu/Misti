@@ -36,4 +36,52 @@ public class GroupingSignScannerTest {
         assertEquals("()", token.value);
         assertEquals(TokenType.Unit, token.type);
     }
+
+    @Test
+    @DisplayName("should scan unit with whitespace in between")
+    void t11() {
+        var token = tokenOf("( )");
+        assertEquals("()", token.value);
+        assertEquals(TokenType.Unit, token.type);
+
+        token = tokenOf("(      )");
+        assertEquals("()", token.value);
+        assertEquals(TokenType.Unit, token.type);
+    }
+
+    @Test
+    @DisplayName("should scan a open and close parentheses")
+    void t2() {
+        var token = tokenOf("(10)");
+        assertEquals("(", token.value);
+        assertEquals(TokenType.ParenOpen, token.type);
+
+        token = tokenOf(").log");
+        assertEquals(")", token.value);
+        assertEquals(TokenType.ParenClosed, token.type);
+    }
+
+    @Test
+    @DisplayName("should scan open and closed brackets")
+    void t3() {
+        var token = tokenOf("[");
+        assertEquals("[", token.value);
+        assertEquals(TokenType.BracketOpen, token.type);
+
+        token = tokenOf("]");
+        assertEquals("]", token.value);
+        assertEquals(TokenType.BracketClosed, token.type);
+    }
+
+    @Test
+    @DisplayName("should scan open and closed braces")
+    void t4() {
+        var token = tokenOf("{");
+        assertEquals("{", token.value);
+        assertEquals(TokenType.BraceOpen, token.type);
+
+        token = tokenOf("}");
+        assertEquals("}", token.value);
+        assertEquals(TokenType.BraceClosed, token.type);
+    }
 }
