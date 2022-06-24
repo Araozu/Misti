@@ -45,28 +45,28 @@ public class GroupingSignScanner extends AbstractScanner {
                     return create(TokenType.Unit);
                 } else {
                     append('(');
-                    return create(TokenType.ParenOpen);
+                    return create(TokenType.LeftParen);
                 }
             }
             case ')': {
                 append(next());
-                return create(TokenType.ParenClosed);
+                return create(TokenType.RightParen);
             }
             case '[': {
                 append(next());
-                return create(TokenType.BracketOpen);
+                return create(TokenType.LeftBracket);
             }
             case ']': {
                 append(next());
-                return create(TokenType.BracketClosed);
+                return create(TokenType.RightBracket);
             }
             case '{': {
                 append(next());
-                return create(TokenType.BraceOpen);
+                return create(TokenType.LeftBrace);
             }
             case '}': {
                 append(next());
-                return create(TokenType.BraceClosed);
+                return create(TokenType.RightBrace);
             }
         }
         // Should never happen

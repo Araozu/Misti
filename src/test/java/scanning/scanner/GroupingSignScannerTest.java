@@ -54,11 +54,11 @@ public class GroupingSignScannerTest {
     void t2() {
         var token = tokenOf("(10)");
         assertEquals("(", token.value);
-        assertEquals(TokenType.ParenOpen, token.type);
+        assertEquals(TokenType.LeftParen, token.type);
 
         token = tokenOf(").log");
         assertEquals(")", token.value);
-        assertEquals(TokenType.ParenClosed, token.type);
+        assertEquals(TokenType.RightParen, token.type);
     }
 
     @Test
@@ -66,11 +66,11 @@ public class GroupingSignScannerTest {
     void t3() {
         var token = tokenOf("[");
         assertEquals("[", token.value);
-        assertEquals(TokenType.BracketOpen, token.type);
+        assertEquals(TokenType.LeftBracket, token.type);
 
         token = tokenOf("]");
         assertEquals("]", token.value);
-        assertEquals(TokenType.BracketClosed, token.type);
+        assertEquals(TokenType.RightBracket, token.type);
     }
 
     @Test
@@ -78,10 +78,10 @@ public class GroupingSignScannerTest {
     void t4() {
         var token = tokenOf("{");
         assertEquals("{", token.value);
-        assertEquals(TokenType.BraceOpen, token.type);
+        assertEquals(TokenType.LeftBrace, token.type);
 
         token = tokenOf("}");
         assertEquals("}", token.value);
-        assertEquals(TokenType.BraceClosed, token.type);
+        assertEquals(TokenType.RightBrace, token.type);
     }
 }

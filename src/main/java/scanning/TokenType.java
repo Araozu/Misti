@@ -26,14 +26,14 @@ public enum TokenType {
     Unit,
     Operator,
     // Parentheses
-    ParenOpen,
-    ParenClosed,
+    LeftParen,
+    RightParen,
     // Brackets
-    BracketOpen,
-    BracketClosed,
+    LeftBracket,
+    RightBracket,
     // Braces
-    BraceOpen,
-    BraceClosed,
+    LeftBrace,
+    RightBrace,
     EOF,
     // Indicates an increase in indentation
     Indent,

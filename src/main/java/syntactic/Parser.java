@@ -43,7 +43,7 @@ public class Parser {
     /**
      * @return Token at current position, or null if there are no tokens left
      */
-    private Token nextToken() {
+    private Token next() {
         if (position >= tokenAmount) {
             return null;
         } else {
@@ -53,6 +53,33 @@ public class Parser {
         }
     }
 
+    private Token peek() {
+        return tokens.get(position);
+    }
+
+    private boolean check(TokenType type) {
+        if (position >= tokenAmount) return false;
+        return peek().type == type;
+    }
+
+    /**
+     * Checks if the current token is any of types. If it is,
+     * the token is consumed and true is returned.
+     * Otherwise, false is returned
+     *
+     * @param types Array of types to check
+     * @return Whether any of the types was found
+     */
+    private boolean match(TokenType... types) {
+        for (TokenType type : types) {
+            if (check(type)) {
+                next();
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     private boolean expect(TokenType type, Token t) {
         if (t == null) return false;
@@ -62,40 +89,35 @@ public class Parser {
     /**
      * @return The next expression, or null if there are no expressions left
      */
-    public Expr nextExpr() {
-        Token nextToken = nextToken();
+    public Expr expression() {
+        Token nextToken = peek();
         if (nextToken == null) {
             return null;
         }
 
-        switch (nextToken.type) {
-            case Integer: {
-                return new Expr.Integer(nextToken);
-            }
-            case Floating: {
-                return new Expr.Floating(nextToken);
-            }
-            case String: {
-                return new Expr.String(nextToken);
-            }
-            case Identifier: {
-                return new Expr.Identifier(nextToken);
-            }
-            case Unit: {
-                return new Expr.Unit(nextToken);
-            }
-            case ParenOpen: {
-                Expr next = nextExpr();
-                if (expect(TokenType.ParenClosed, nextToken())) {
-                    return next;
-                } else {
-                    errorList.addError(new SyntaxError("Missing closing paren"));
-                    return null;
-                }
-            }
-            default: {
+        return primary();
+    }
+
+    private Expr primary() {
+        if (check(TokenType.Integer)) return new Expr.Integer(next());
+        if (check(TokenType.Floating)) return new Expr.Floating(next());
+        if (check(TokenType.String)) return new Expr.String(next());
+        if (check(TokenType.Identifier)) return new Expr.Identifier(next());
+        if (check(TokenType.Unit)) return new Expr.Unit(next());
+
+        if (check(TokenType.LeftParen)) {
+            // Consume left paren
+            next();
+            Expr next = expression();
+            if (check(TokenType.RightParen)) {
+                return next;
+            } else {
+                errorList.addError(new SyntaxError("Missing closing paren"));
                 return null;
             }
         }
+
+        // TODO: Error handling?
+        return null;
     }
 }

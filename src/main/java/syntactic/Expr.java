@@ -17,6 +17,8 @@ package syntactic;
 
 import scanning.Token;
 
+import java.util.List;
+
 public abstract class Expr {
     static class Integer extends Expr {
         final Token token;
@@ -59,6 +61,16 @@ public abstract class Expr {
 
         Unit(Token token) {
             this.token = token;
+        }
+    }
+
+    static class FnCall extends Expr {
+        final Expr fnExpr;
+        final List<Expr> arguments;
+
+        FnCall(Expr fnExpr, List<Expr> arguments) {
+            this.fnExpr = fnExpr;
+            this.arguments = arguments;
         }
     }
 }

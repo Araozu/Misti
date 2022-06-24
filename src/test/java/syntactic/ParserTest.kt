@@ -28,7 +28,7 @@ object ParserTest {
     private fun getExpression(input: String, errorList: ErrorList = ErrorList()): Expr? {
         val mainScanner = MainScanner(input)
         val parser = Parser(mainScanner, errorList)
-        return parser.nextExpr()
+        return parser.expression()
     }
 
     private fun typeError(type: String): String {
@@ -102,4 +102,14 @@ object ParserTest {
         assertNull(result, "Result is not null")
         assertEquals("Missing closing paren", errorList.errors[0].reason)
     }
+
+    /*
+    @Test
+    fun `should parse a function call with an identifier`() {
+        val result = getExpression("print 10")
+        if (result !is Expr.FnCall) {
+            fail(typeError("Function Call"))
+        }
+    }
+     */
 }

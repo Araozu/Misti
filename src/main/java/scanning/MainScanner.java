@@ -229,7 +229,7 @@ public class MainScanner {
         }
         // No adequate scanner found, or implemented.
         else {
-            // TODO: Error handling
+            errorList.addError(new ScannerError("Unrecognized character: " + nextChar));
             System.err.println("unrecognized character: " + nextChar);
             position++;
         }
