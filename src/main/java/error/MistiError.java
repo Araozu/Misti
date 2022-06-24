@@ -15,19 +15,10 @@
 
 package error;
 
-import java.util.ArrayList;
-import java.util.List;
+public abstract class MistiError {
+    public final String reason;
 
-public class ErrorList {
-
-    private final List<MistiError> errors = new ArrayList<>();
-
-    public void addError(MistiError error) {
-        errors.add(error);
+    public MistiError(String reason) {
+        this.reason = reason;
     }
-
-    public List<MistiError> getErrors() {
-        return errors;
-    }
-
 }

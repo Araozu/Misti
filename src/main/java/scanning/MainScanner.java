@@ -15,7 +15,7 @@
 
 package scanning;
 
-import error.AbstractError;
+import error.MistiError;
 import error.ErrorList;
 import error.ScannerError;
 import scanning.scanner.*;
@@ -64,11 +64,11 @@ public class MainScanner {
         return position;
     }
 
-    public List<AbstractError> getErrorList() {
+    public List<MistiError> getErrorList() {
         return errorList.getErrors();
     }
 
-    public void addError(AbstractError error) {
+    public void addError(MistiError error) {
         errorList.addError(error);
     }
 

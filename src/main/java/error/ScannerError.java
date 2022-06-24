@@ -15,7 +15,7 @@
 
 package error;
 
-public class ScannerError extends AbstractError {
+public class ScannerError extends MistiError {
 
     public ScannerError(String reason) {
         super(reason);

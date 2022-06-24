@@ -15,6 +15,8 @@
 
 package syntactic;
 
+import error.ErrorList;
+import error.SyntaxError;
 import scanning.MainScanner;
 import scanning.Token;
 import scanning.TokenType;
@@ -26,10 +28,16 @@ public class Parser {
     private int position = 0;
     private final ArrayList<Token> tokens;
     private final int tokenAmount;
+    private final ErrorList errorList;
 
-    public Parser(MainScanner mainScanner) {
+    public Parser(MainScanner mainScanner, ErrorList errorList) {
         tokens = mainScanner.tokens();
         tokenAmount = tokens.size();
+        this.errorList = errorList;
+    }
+
+    public Parser(MainScanner mainScanner) {
+        this(mainScanner, new ErrorList());
     }
 
     /**
@@ -77,12 +85,11 @@ public class Parser {
                 return new Expr.Unit(nextToken);
             }
             case ParenOpen: {
-                // TODO: Recursively parse an expression
                 Expr next = nextExpr();
                 if (expect(TokenType.ParenClosed, nextToken())) {
                     return next;
                 } else {
-                    // TODO: Error handling
+                    errorList.addError(new SyntaxError("Missing closing paren"));
                     return null;
                 }
             }

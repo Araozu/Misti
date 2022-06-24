@@ -15,10 +15,8 @@
 
 package error;
 
-public abstract class AbstractError {
-    public final String reason;
-
-    public AbstractError(String reason) {
-        this.reason = reason;
+public class SyntaxError extends MistiError {
+    public SyntaxError(String reason) {
+        super(reason);
     }
 }
