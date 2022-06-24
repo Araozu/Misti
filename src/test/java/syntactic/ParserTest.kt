@@ -20,13 +20,14 @@ import scanning.TokenType
 import syntactic.Expr.Floating
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
 import kotlin.test.fail
 
 object ParserTest {
-    private fun getExpression(input: String?): Expr {
+    private fun getExpression(input: String): Expr? {
         val mainScanner = MainScanner(input)
         val parser = Parser(mainScanner)
-        return parser.parse()
+        return parser.nextExpr()
     }
 
     private fun typeError(type: String): String {
@@ -81,5 +82,22 @@ object ParserTest {
         }
         assertEquals("()", result.token.value)
         assertEquals(TokenType.Unit, result.token.type)
+    }
+
+    @Test
+    fun `should parse a simple expression inside parenthesis`() {
+        val result = getExpression("(10)")
+        if (result !is Expr.Integer) {
+            fail(typeError("Integer"))
+        }
+
+        assertEquals("10", result.token.value)
+    }
+
+    @Test
+    fun `should not parse a expression if there is no closing paren`() {
+        val result = getExpression("(10")
+        assertNull(result, "Result is not null")
+        // TODO: should report an error
     }
 }

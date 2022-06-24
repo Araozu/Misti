@@ -17,39 +17,78 @@ package syntactic;
 
 import scanning.MainScanner;
 import scanning.Token;
+import scanning.TokenType;
+
+import java.util.ArrayList;
 
 public class Parser {
 
-    private final MainScanner mainScanner;
+    private int position = 0;
+    private final ArrayList<Token> tokens;
+    private final int tokenAmount;
 
     public Parser(MainScanner mainScanner) {
-        this.mainScanner = mainScanner;
+        tokens = mainScanner.tokens();
+        tokenAmount = tokens.size();
     }
 
-    public Expr parse() {
+    /**
+     * @return Token at current position, or null if there are no tokens left
+     */
+    private Token nextToken() {
+        if (position >= tokenAmount) {
+            return null;
+        } else {
+            Token t = tokens.get(position);
+            position += 1;
+            return t;
+        }
+    }
 
-        for (Token nextToken: mainScanner.tokens()) {
-            switch (nextToken.type) {
-                case Integer: {
-                    return new Expr.Integer(nextToken);
-                }
-                case Floating: {
-                    return new Expr.Floating(nextToken);
-                }
-                case String: {
-                    return new Expr.String(nextToken);
-                }
-                case Identifier: {
-                    return new Expr.Identifier(nextToken);
-                }
-                case Unit: {
-                    return new Expr.Unit(nextToken);
-                }
-                default: {
+
+    private boolean expect(TokenType type, Token t) {
+        if (t == null) return false;
+        return t.type == type;
+    }
+
+    /**
+     * @return The next expression, or null if there are no expressions left
+     */
+    public Expr nextExpr() {
+        Token nextToken = nextToken();
+        if (nextToken == null) {
+            return null;
+        }
+
+        switch (nextToken.type) {
+            case Integer: {
+                return new Expr.Integer(nextToken);
+            }
+            case Floating: {
+                return new Expr.Floating(nextToken);
+            }
+            case String: {
+                return new Expr.String(nextToken);
+            }
+            case Identifier: {
+                return new Expr.Identifier(nextToken);
+            }
+            case Unit: {
+                return new Expr.Unit(nextToken);
+            }
+            case ParenOpen: {
+                // TODO: Recursively parse an expression
+                Expr next = nextExpr();
+                if (expect(TokenType.ParenClosed, nextToken())) {
+                    return next;
+                } else {
+                    // TODO: Error handling
                     return null;
                 }
             }
+            default: {
+                return null;
+            }
         }
-        return null;
     }
 }

@@ -24,6 +24,10 @@ public abstract class Expr {
         Integer(Token token) {
             this.token = token;
         }
+
+        public void visit(ExprVisitor visitor) {
+            visitor.visit(this);
+        }
     }
 
     static class Floating extends Expr {

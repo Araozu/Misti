@@ -33,13 +33,13 @@ public class GroupingSignScanner extends AbstractScanner {
     public Token scan() {
         switch (peek1()) {
             case '(': {
-                // Consume open parentheses
+                // Consume open parenthesis
                 next();
                 // Consume possible whitespace
                 while (peek1() == ' ') next();
 
                 if (peek1() == ')') {
-                    // consume closing parentheses, create unit token
+                    // consume closing parenthesis, create unit token
                     append('(');
                     append(next());
                     return create(TokenType.Unit);

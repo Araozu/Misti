@@ -50,7 +50,7 @@ public class GroupingSignScannerTest {
     }
 
     @Test
-    @DisplayName("should scan a open and close parentheses")
+    @DisplayName("should scan a open and close parenthesis")
     void t2() {
         var token = tokenOf("(10)");
         assertEquals("(", token.value);
